@@ -109,6 +109,24 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 
 }
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var identityServerDb = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
+        var configDb = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+        var persistedGrantDb = scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>();
+        configDb.Database.Migrate();
+        persistedGrantDb.Database.Migrate();
+        identityServerDb.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Smth went wrong");
+        throw;
+    }
+}
 
 
 app.UseHttpsRedirection();
