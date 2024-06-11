@@ -3,9 +3,39 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServer", "IdentityServer", "{4536C38A-50A2-44EC-A148-DB7631E54737}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer.WebApi", "src\IdentityServer\IdentityServer.WebApi\IdentityServer.WebApi.csproj", "{325365A9-9C14-4705-87B0-12FEA436341B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer.Infrastructure.Data", "src\IdentityServer\IdentityServer.Infrastructure.Data\IdentityServer.Infrastructure.Data.csproj", "{8319DC63-21A9-4BE6-828F-DDB9CC790B86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBus", "src\MessageBus\MessageBus.csproj", "{6021EB3A-2DA8-4084-BC56-4F3D7B6DABCB}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{325365A9-9C14-4705-87B0-12FEA436341B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{325365A9-9C14-4705-87B0-12FEA436341B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{325365A9-9C14-4705-87B0-12FEA436341B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{325365A9-9C14-4705-87B0-12FEA436341B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8319DC63-21A9-4BE6-828F-DDB9CC790B86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8319DC63-21A9-4BE6-828F-DDB9CC790B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8319DC63-21A9-4BE6-828F-DDB9CC790B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8319DC63-21A9-4BE6-828F-DDB9CC790B86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6021EB3A-2DA8-4084-BC56-4F3D7B6DABCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6021EB3A-2DA8-4084-BC56-4F3D7B6DABCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6021EB3A-2DA8-4084-BC56-4F3D7B6DABCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6021EB3A-2DA8-4084-BC56-4F3D7B6DABCB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{325365A9-9C14-4705-87B0-12FEA436341B} = {4536C38A-50A2-44EC-A148-DB7631E54737}
+		{8319DC63-21A9-4BE6-828F-DDB9CC790B86} = {4536C38A-50A2-44EC-A148-DB7631E54737}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DF820B68-2365-4320-89FF-9C7C54D34485}
