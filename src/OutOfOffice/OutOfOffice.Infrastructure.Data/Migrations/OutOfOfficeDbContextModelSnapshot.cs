@@ -61,9 +61,7 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
             modelBuilder.Entity("OutOfOffice.Domain.Employees.Employee", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)")
-                        .HasAnnotation("DatabaseGenerated", DatabaseGeneratedOption.Identity);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FullName")
                         .IsRequired()

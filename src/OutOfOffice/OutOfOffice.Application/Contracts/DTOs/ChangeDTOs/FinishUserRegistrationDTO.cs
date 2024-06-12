@@ -9,12 +9,12 @@ namespace OutOfOffice.Application.Contracts.DTOs.ChangeDTOs
 {
     public class FinishUserRegistrationDTO
     {
-        public EmployeeStatus EmployeeStatus { get; set; }
-        public Position Position { get; set; }
+        public string EmployeeStatus { get; set; }
+        public string Position { get; set; }
 
-        public Subdivision Subdivision { get; set; }
+        public string Subdivision { get; set; }
 
-        public string? ParnerName { get; set; } = "";
+        public string? PartnerName { get; set; } = "";
 
         public int DayOffCount { get; set; } = 0;
     }

@@ -13,7 +13,7 @@ using OutOfOffice.Infrastructure.Data;
 namespace OutOfOffice.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(OutOfOfficeDbContext))]
-    [Migration("20240612140558_Migra")]
+    [Migration("20240612205501_Migra")]
     partial class Migra
     {
         /// <inheritdoc />
@@ -64,9 +64,7 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
             modelBuilder.Entity("OutOfOffice.Domain.Employees.Employee", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)")
-                        .HasAnnotation("DatabaseGenerated", DatabaseGeneratedOption.Identity);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FullName")
                         .IsRequired()

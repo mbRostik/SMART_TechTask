@@ -5,6 +5,7 @@ using MessageBus.Messages;
 using Microsoft.EntityFrameworkCore;
 using OutOfOffice.Application.UseCases.Commands;
 using OutOfOffice.Domain.Employees;
+using OutOfOffice.Domain.Employees.Enums;
 using OutOfOffice.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
@@ -38,20 +39,16 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
                     throw new Exception("Unregistered user not found.");
                 }
 
-                var partner = await dbContext.Employees.FirstOrDefaultAsync(x => x.FullName == request.model.ParnerName);
-                if (partner == null)
-                {
-                    throw new Exception("Partner not found.");
-                }
+                var partnerId = await dbContext.Employees.FirstOrDefaultAsync(x => x.FullName == request.model.PartnerName).Select(x=>x.Id);
 
                 Employee employee = new Employee
                 {
                     Id = request.userId,
                     FullName = unRegUser.UserName,
-                    PeoplePartnerID = partner.Id,
-                    Position = request.model.Position,
-                    Status = request.model.EmployeeStatus,
-                    Subdivision = request.model.Subdivision,
+                    PeoplePartnerID = partnerId,
+                    Position = (Position)Enum.Parse(typeof(Position), request.model.Position),
+                    Status = (EmployeeStatus)Enum.Parse(typeof(EmployeeStatus), request.model.EmployeeStatus),
+                    Subdivision = (Subdivision)Enum.Parse(typeof(Subdivision), request.model.Subdivision),
                     OutOfOfficeBalance = request.model.DayOffCount,
                     Photo = new byte[0]
                 };
@@ -60,6 +57,7 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
 
                 UserPositionSetEvent userPositionSetEvent = new UserPositionSetEvent
                 {
+                    UserId = request.userId,
                     Position = model.Entity.Position.ToString()
                 };
                 await _publisher.Publish(userPositionSetEvent);

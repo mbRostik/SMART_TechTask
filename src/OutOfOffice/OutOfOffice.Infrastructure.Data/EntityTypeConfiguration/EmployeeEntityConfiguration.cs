@@ -15,10 +15,6 @@ namespace OutOfOffice.Infrastructure.Data.EntityTypeConfiguration
         public void Configure(EntityTypeBuilder<Employee> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(c => c.Id)
-               .IsRequired()
-               .ValueGeneratedOnAdd()
-               .HasAnnotation("DatabaseGenerated", DatabaseGeneratedOption.Identity);
 
             builder.Property(e => e.FullName)
              .IsRequired()

@@ -1,9 +1,16 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import { Link, useNavigate } from 'react-router-dom';
 import userManager from './AuthFiles/authConfig';
+import { useAuth } from './Components/AuthProvider';
+import { ThreeDots } from 'react-loader-spinner';
+import FinishUserRegistrationForm from './Components/FinishUserRegistration/FinishUserRegistrationForm.jsx'
 
 function App() {
-   
+    const navigate = useNavigate();
+    const { user, userData, loading, isAuthorized } = useAuth();
+
+
     const onLogin = () => {
         userManager.signinRedirect();
     };
@@ -15,16 +22,38 @@ function App() {
 
 
     return (
-        <div>
-            <h1 id="tabelLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            <div className="nav-item">
-
-                <button onClick={onLogin} className="NavBarButton_Login">Login / Sign Up</button>
-                <button className="signout-button" onClick={onLogout}>
-                    SIGN OUT
-                </button>
-            </div>
+        <div className="">
+            {loading ? (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                    <ThreeDots color="orange" height={80} width={80} />
+                </div>
+            ) : isAuthorized === false ? (
+                <div className="">
+                    <div><button onClick={onLogin} className="">Login</button></div>
+                    <div><button onClick={onLogin} className="">Sign Up</button></div>
+                </div>
+            ) : userData === null ? (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                    <ThreeDots color="#00BFFF" height={80} width={80} />
+                </div>
+                    ) : (
+                    <div className="">
+                            
+                        {userData && userData.fullyRegistered ? (
+                            <>
+                                        
+                                <div className="">
+                                    <button onClick={onLogout} className="">LogOut</button>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="">
+                                <button onClick={onLogout} className="">LogOut</button>
+                                <FinishUserRegistrationForm />
+                            </div>
+                        )}
+                    </div>
+            )}
         </div>
 
     );
