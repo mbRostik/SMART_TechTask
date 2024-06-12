@@ -1,0 +1,6 @@
+@OutOfOffice.WebApi_HostAddress = http://localhost:5205
+
+GET {{OutOfOffice.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
