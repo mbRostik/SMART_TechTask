@@ -13,7 +13,7 @@ namespace OutOfOffice.Domain.ApprovalRequests
     public class ApprovalRequest
     {
         public int Id { get; set; } 
-        public int ApproverId { get; set; }  
+        public string ApproverId { get; set; }  
         public int LeaveRequestId { get; set; }  
         public ApprovalRequestStatus Status { get; set; }
         public string? Comment { get; set; }

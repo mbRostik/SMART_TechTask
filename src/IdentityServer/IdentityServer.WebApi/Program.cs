@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Localization;
 using RabbitMQ.Client;
 using System.Net;
 using MessageBus.Messages;
+using IdentityServer.WebApi.Consumers;
 var builder = WebApplication.CreateBuilder(args);
 
 var assembly = typeof(Program).Assembly.GetName().Name;
@@ -24,7 +25,8 @@ var defaultConnString = builder.Configuration.GetConnectionString("MSSQLConnecti
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-
+builder.Services.AddScoped<RoleManager<IdentityRole>>();
+builder.Services.AddScoped<UserManager<IdentityUser>>();
 builder.Services.AddRazorPages().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
 builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
 builder.Services.AddLocalization(options =>
@@ -87,16 +89,21 @@ builder.Services.AddIdentityServer(options =>
     .AddDeveloperSigningCredential();
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumer<UserPositionSetConsumer>();
+
     x.UsingRabbitMq((cxt, cfg) =>
     {
-        cfg.Host("rabbitmq", "/", h =>
+        cfg.Host("localhost", "/", h =>
         {
             h.Username("guest");
             h.Password("guest");
         });
 
         cfg.Publish<UserCreationEvent>(p => p.ExchangeType = ExchangeType.Fanout);
-
+        cfg.ReceiveEndpoint("IdentityServer_UserPositionSetConsumer_queue", e =>
+        {
+            e.ConfigureConsumer<UserPositionSetConsumer>(cxt);
+        });
     });
 
 });
@@ -109,24 +116,24 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 
 }
-using (var scope = app.Services.CreateScope())
-{
-    try
-    {
-        var identityServerDb = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
-        var configDb = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-        var persistedGrantDb = scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>();
-        configDb.Database.Migrate();
-        persistedGrantDb.Database.Migrate();
-        identityServerDb.Database.Migrate();
-    }
-    catch (Exception ex)
-    {
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Smth went wrong");
-        throw;
-    }
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    try
+//    {
+//        var identityServerDb = scope.ServiceProvider.GetRequiredService<IdentityServerDbContext>();
+//        var configDb = scope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+//        var persistedGrantDb = scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>();
+//        configDb.Database.Migrate();
+//        persistedGrantDb.Database.Migrate();
+//        identityServerDb.Database.Migrate();
+//    }
+//    catch (Exception ex)
+//    {
+//        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+//        logger.LogError(ex, "Smth went wrong");
+//        throw;
+//    }
+//}
 
 
 app.UseHttpsRedirection();

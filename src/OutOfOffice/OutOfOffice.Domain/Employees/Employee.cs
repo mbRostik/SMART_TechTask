@@ -14,9 +14,9 @@ namespace OutOfOffice.Domain.Employees
 {
     public class Employee
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string FullName { get; set; }
-        public int? PeoplePartnerID { get; set; }
+        public string? PeoplePartnerID { get; set; }
         public int OutOfOfficeBalance { get; set; }
         public byte[]? Photo { get; set; }
         public Subdivision Subdivision { get; set; } 

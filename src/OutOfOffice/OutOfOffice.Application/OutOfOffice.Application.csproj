@@ -6,4 +6,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.2.2" />
+    <PackageReference Include="MediatR" Version="12.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\MessageBus\MessageBus.csproj" />
+    <ProjectReference Include="..\OutOfOffice.Domain\OutOfOffice.Domain.csproj" />
+    <ProjectReference Include="..\OutOfOffice.Infrastructure.Data\OutOfOffice.Infrastructure.Data.csproj" />
+  </ItemGroup>
+
 </Project>

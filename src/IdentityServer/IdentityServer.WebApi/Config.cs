@@ -15,15 +15,15 @@ namespace IdentityServer.WebApi
         public static IEnumerable<ApiScope> ApiScopes =>
            new ApiScope[]
            {
-               new ApiScope("User.WebApi.Scope")
+               new ApiScope("OutOfOffice.WebApi.Scope")
 
            };
 
         public static IEnumerable<ApiResource> ApiResources => new[] {
-            new ApiResource("User.WebApi")
+            new ApiResource("OutOfOffice.WebApi")
              {
-                 Scopes=new List<string>{ "User.WebApi.Scope"},
-                 ApiSecrets=new List<Secret>{new Secret("User.WebApi.Secret".Sha256())},
+                 Scopes=new List<string>{ "OutOfOffice.WebApi.Scope"},
+                 ApiSecrets=new List<Secret>{new Secret("OutOfOffice.WebApi.Secret".Sha256())},
                  UserClaims = { "Employee", "HRManager", "PMManager", "Administrator" }
              }
         };
@@ -41,7 +41,7 @@ namespace IdentityServer.WebApi
                     PostLogoutRedirectUris={ "https://localhost:5173/signout-callback-oidc" },
                     AllowOfflineAccess = true,
                     AllowedScopes = 
-                    {"openid", "profile", "User.WebApi.Scope"},
+                    {"openid", "profile", "OutOfOffice.WebApi.Scope"},
                     RequireConsent = true,
                     RequirePkce=true,
                     AllowPlainTextPkce=true,

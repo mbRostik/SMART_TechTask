@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OutOfOffice.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Migra : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,10 +15,9 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                 name: "Employees",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PeoplePartnerID = table.Column<int>(type: "int", nullable: true),
+                    PeoplePartnerID = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     OutOfOfficeBalance = table.Column<int>(type: "int", nullable: false),
                     Photo = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     Subdivision = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -36,12 +35,24 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LeaveRequest",
+                name: "UnRegisteredUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UnRegisteredUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LeaveRequests",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: false),
+                    EmployeeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AbsenceReason = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -50,16 +61,16 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LeaveRequest", x => x.Id);
+                    table.PrimaryKey("PK_LeaveRequests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LeaveRequest_Employees_EmployeeId",
+                        name: "FK_LeaveRequests_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Project",
+                name: "Projects",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -67,65 +78,60 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                     ProjectType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ProjectManagerId = table.Column<int>(type: "int", nullable: false),
+                    ProjectManagerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "Active"),
-                    EmployeeId = table.Column<int>(type: "int", nullable: true)
+                    EmployeeId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Project", x => x.Id);
+                    table.PrimaryKey("PK_Projects", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Project_Employees_EmployeeId",
+                        name: "FK_Projects_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Project_Employees_ProjectManagerId",
+                        name: "FK_Projects_Employees_ProjectManagerId",
                         column: x => x.ProjectManagerId,
                         principalTable: "Employees",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "ApprovalRequest",
+                name: "ApprovalRequests",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ApproverId = table.Column<int>(type: "int", nullable: false),
+                    ApproverId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     LeaveRequestId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "New"),
                     Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApprovalRequest", x => x.Id);
+                    table.PrimaryKey("PK_ApprovalRequests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ApprovalRequest_Employees_ApproverId",
+                        name: "FK_ApprovalRequests_Employees_ApproverId",
                         column: x => x.ApproverId,
                         principalTable: "Employees",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ApprovalRequest_LeaveRequest_LeaveRequestId",
+                        name: "FK_ApprovalRequests_LeaveRequests_LeaveRequestId",
                         column: x => x.LeaveRequestId,
-                        principalTable: "LeaveRequest",
+                        principalTable: "LeaveRequests",
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.InsertData(
-                table: "Employees",
-                columns: new[] { "Id", "FullName", "OutOfOfficeBalance", "PeoplePartnerID", "Photo", "Position", "Status", "Subdivision" },
-                values: new object[] { 1, "Rostik Daskaliuk", 2, null, null, "HRManager", "Active", "HR" });
-
             migrationBuilder.CreateIndex(
-                name: "IX_ApprovalRequest_ApproverId",
-                table: "ApprovalRequest",
+                name: "IX_ApprovalRequests_ApproverId",
+                table: "ApprovalRequests",
                 column: "ApproverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApprovalRequest_LeaveRequestId",
-                table: "ApprovalRequest",
+                name: "IX_ApprovalRequests_LeaveRequestId",
+                table: "ApprovalRequests",
                 column: "LeaveRequestId");
 
             migrationBuilder.CreateIndex(
@@ -134,18 +140,18 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                 column: "PeoplePartnerID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LeaveRequest_EmployeeId",
-                table: "LeaveRequest",
+                name: "IX_LeaveRequests_EmployeeId",
+                table: "LeaveRequests",
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Project_EmployeeId",
-                table: "Project",
+                name: "IX_Projects_EmployeeId",
+                table: "Projects",
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Project_ProjectManagerId",
-                table: "Project",
+                name: "IX_Projects_ProjectManagerId",
+                table: "Projects",
                 column: "ProjectManagerId");
         }
 
@@ -153,13 +159,16 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ApprovalRequest");
+                name: "ApprovalRequests");
 
             migrationBuilder.DropTable(
-                name: "Project");
+                name: "Projects");
 
             migrationBuilder.DropTable(
-                name: "LeaveRequest");
+                name: "UnRegisteredUsers");
+
+            migrationBuilder.DropTable(
+                name: "LeaveRequests");
 
             migrationBuilder.DropTable(
                 name: "Employees");

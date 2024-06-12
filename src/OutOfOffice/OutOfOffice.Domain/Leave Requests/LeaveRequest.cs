@@ -14,7 +14,7 @@ namespace OutOfOffice.Domain.Leave_Requests
     public class LeaveRequest
     {
         public int Id { get; set; }
-        public int EmployeeId { get; set; }
+        public string EmployeeId { get; set; }
         public AbsenceReason AbsenceReason { get; set; }
         public DateTime StartDate { get; set; }  
         public DateTime EndDate { get; set; }  

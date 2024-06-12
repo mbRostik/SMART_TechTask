@@ -13,8 +13,8 @@ using OutOfOffice.Infrastructure.Data;
 namespace OutOfOffice.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(OutOfOfficeDbContext))]
-    [Migration("20240612101412_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240612140558_Migra")]
+    partial class Migra
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,8 +35,9 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ApproverId")
-                        .HasColumnType("int");
+                    b.Property<string>("ApproverId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Comment")
                         .HasMaxLength(1000)
@@ -57,17 +58,15 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
 
                     b.HasIndex("LeaveRequestId");
 
-                    b.ToTable("ApprovalRequest");
+                    b.ToTable("ApprovalRequests");
                 });
 
             modelBuilder.Entity("OutOfOffice.Domain.Employees.Employee", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("nvarchar(450)")
                         .HasAnnotation("DatabaseGenerated", DatabaseGeneratedOption.Identity);
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -77,8 +76,8 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                     b.Property<int>("OutOfOfficeBalance")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PeoplePartnerID")
-                        .HasColumnType("int");
+                    b.Property<string>("PeoplePartnerID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<byte[]>("Photo")
                         .HasColumnType("varbinary(max)");
@@ -100,17 +99,6 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                     b.HasIndex("PeoplePartnerID");
 
                     b.ToTable("Employees");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FullName = "Rostik Daskaliuk",
-                            OutOfOfficeBalance = 2,
-                            Position = "HRManager",
-                            Status = "Active",
-                            Subdivision = "HR"
-                        });
                 });
 
             modelBuilder.Entity("OutOfOffice.Domain.Leave_Requests.LeaveRequest", b =>
@@ -130,8 +118,9 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
@@ -149,7 +138,7 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("LeaveRequest");
+                    b.ToTable("LeaveRequests");
                 });
 
             modelBuilder.Entity("OutOfOffice.Domain.Projects.Project", b =>
@@ -165,14 +154,15 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ProjectManagerId")
-                        .HasColumnType("int");
+                    b.Property<string>("ProjectManagerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProjectType")
                         .IsRequired()
@@ -193,7 +183,21 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
 
                     b.HasIndex("ProjectManagerId");
 
-                    b.ToTable("Project");
+                    b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("OutOfOffice.Domain.UnRegisteredUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UnRegisteredUsers");
                 });
 
             modelBuilder.Entity("OutOfOffice.Domain.ApprovalRequests.ApprovalRequest", b =>
