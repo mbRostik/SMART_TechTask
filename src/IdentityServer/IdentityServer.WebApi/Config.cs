@@ -9,7 +9,7 @@ namespace IdentityServer.WebApi
            {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResource("roles", new [] { "Employee", "HRManager", "PMManager", "Administrator" })
+                new IdentityResource("roles", new[] { "role" })
            };
 
         public static IEnumerable<ApiScope> ApiScopes =>
@@ -24,7 +24,7 @@ namespace IdentityServer.WebApi
              {
                  Scopes=new List<string>{ "OutOfOffice.WebApi.Scope"},
                  ApiSecrets=new List<Secret>{new Secret("OutOfOffice.WebApi.Secret".Sha256())},
-                 UserClaims = { "Employee", "HRManager", "PMManager", "Administrator" }
+                 UserClaims = new List<string> { "role" }
              }
         };
 

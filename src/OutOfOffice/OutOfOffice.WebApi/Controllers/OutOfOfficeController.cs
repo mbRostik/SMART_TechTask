@@ -19,11 +19,16 @@ namespace OutOfOffice.WebApi.Controllers
         }
 
         [HttpGet("GetUserProfile")]
-        [AllowAnonymous]
+        [Authorize(Policy = "RequireEmployeeRole")]
+
         public async Task<ActionResult<GiveUserProfileDTO>> GetUserProfile()
         {
-
             var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            foreach (var c in HttpContext.User.Claims)
+            {
+                Console.WriteLine(c.Value +" "+c.Value);
+            }
             if (string.IsNullOrEmpty(userId))
             {
                 return NotFound("User ID not found.");
