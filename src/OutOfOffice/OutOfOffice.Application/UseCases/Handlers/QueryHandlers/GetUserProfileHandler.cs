@@ -44,9 +44,9 @@ namespace OutOfOffice.Application.UseCases.Handlers.QueryHandlers
                     PeoplePartnerID = userModel.PeoplePartnerID,
                     OutOfOfficeBalance = userModel.OutOfOfficeBalance,
                     Photo = userModel.Photo,
-                    Position = userModel.Position,
-                    Status = userModel.Status,
-                    Subdivision = userModel.Subdivision,
+                    Position = userModel.Position.ToString(),
+                    Status = userModel.Status.ToString(),
+                    Subdivision = userModel.Subdivision.ToString(),
                     FullyRegistered = true
                 };
 

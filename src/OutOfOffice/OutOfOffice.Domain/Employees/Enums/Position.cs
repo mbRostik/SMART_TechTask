@@ -10,7 +10,7 @@ namespace OutOfOffice.Domain.Employees.Enums
     {
         HRManager,
         Employee,
-        ProjectManager,
+        PMManager,
         Administrator
     }
 }

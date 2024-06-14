@@ -42,8 +42,7 @@ namespace OutOfOffice.Infrastructure.Data.EntityTypeConfiguration
             builder.Property(ar => ar.Status)
                .IsRequired()
                .HasDefaultValue(ApprovalRequestStatus.New)
-               .HasConversion<string>()
-               .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore); 
+               .HasConversion<string>(); 
 
             builder.Property(ar => ar.Comment)
                .HasMaxLength(1000); 

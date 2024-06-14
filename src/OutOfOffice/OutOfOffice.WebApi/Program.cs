@@ -54,6 +54,9 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("PMManager"));
     options.AddPolicy("RequireAdministratorRole", policy =>
         policy.RequireRole("Administrator"));
+    options.AddPolicy("RequireHROrPMManagerRole", policy =>
+            policy.RequireAssertion(context =>
+                context.User.IsInRole("HRManager") || context.User.IsInRole("PMManager")));
 });
 builder.Services.AddCors();
 
@@ -76,6 +79,8 @@ builder.Services.AddMassTransit(x =>
         });
 
         cfg.Publish<UserPositionSetEvent>(p => p.ExchangeType = ExchangeType.Fanout);
+        cfg.Publish<UserChangedEvent>(p => p.ExchangeType = ExchangeType.Fanout);
+
         cfg.ReceiveEndpoint("OutOfOffice_UserConsumer_queue", e =>
         {
             e.ConfigureConsumer<UserCreation_Consumer>(cxt);

@@ -51,9 +51,9 @@ export const AuthProvider = ({ children }) => {
                 setUser(user);
                 const userData = await fetchUserData(user.access_token);
                 if (userData) {
+                    console.log(userData);
                     setIsAuthorized(true);
                     setUserData(userData);
-                    console.log(userData);
                 } else {
                     setIsAuthorized(false);
                 }

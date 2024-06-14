@@ -10,7 +10,6 @@ namespace OutOfOffice.Domain.Leave_Requests.Enums
     {
         New,
         Approved,
-        Rejected,
-        Pending
+        Rejected
     }
 }

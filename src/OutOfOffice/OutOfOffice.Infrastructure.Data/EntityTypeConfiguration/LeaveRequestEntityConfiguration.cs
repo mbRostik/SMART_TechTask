@@ -46,8 +46,7 @@ namespace OutOfOffice.Infrastructure.Data.EntityTypeConfiguration
             builder.Property(lr => lr.Status)
                .IsRequired()
                .HasDefaultValue(LeaveRequestStatus.New)
-               .HasConversion<string>()
-               .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+               .HasConversion<string>();
         }
     }
 }

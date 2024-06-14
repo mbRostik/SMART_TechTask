@@ -90,6 +90,7 @@ builder.Services.AddIdentityServer(options =>
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<UserPositionSetConsumer>();
+    x.AddConsumer<UserChangeConsumer>();
 
     x.UsingRabbitMq((cxt, cfg) =>
     {
@@ -103,6 +104,8 @@ builder.Services.AddMassTransit(x =>
         cfg.ReceiveEndpoint("IdentityServer_UserPositionSetConsumer_queue", e =>
         {
             e.ConfigureConsumer<UserPositionSetConsumer>(cxt);
+            e.ConfigureConsumer<UserChangeConsumer>(cxt);
+
         });
     });
 

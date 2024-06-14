@@ -18,10 +18,11 @@ namespace OutOfOffice.Application.Contracts.DTOs.GiveDTOs
         public string? PeoplePartnerID { get; set; }
         public int? OutOfOfficeBalance { get; set; }
         public byte[]? Photo { get; set; }
-        public Subdivision? Subdivision { get; set; }
-        public Position? Position { get; set; }
-        public EmployeeStatus? Status { get; set; }
+        public string? Subdivision { get; set; }
+        public string? Position { get; set; }
+        public string? Status { get; set; }
 
         public bool FullyRegistered { get; set; } = false;
+
     }
 }

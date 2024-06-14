@@ -60,7 +60,7 @@ const FinishUserRegistrationForm = () => {
                 <select value={position} onChange={(e) => setPosition(e.target.value)}>
                     <option value="HRManager">HR Manager</option>
                     <option value="Employee">Employee</option>
-                    <option value="ProjectManager">Project Manager</option>
+                    <option value="PMManager">Project Manager</option>
                     <option value="Administrator">Administrator</option>
                 </select>
             </div>
