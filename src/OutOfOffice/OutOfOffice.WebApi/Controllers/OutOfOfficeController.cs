@@ -22,6 +22,48 @@ namespace OutOfOffice.WebApi.Controllers
             this.mediator = mediator;
         }
 
+
+
+        [HttpPost("UploadProfilePhoto")]
+        public async Task<ActionResult> UploadProfilePhoto([FromBody] ChangeProfilePhotoDTO data)
+        {
+            Console.WriteLine("keghbkwhbglwgrwrlkg");
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                Console.WriteLine("UploadProfilePhoto called but user ID is missing.");
+                return Unauthorized("User ID is required.");
+            }
+
+            try
+            {
+                Console.WriteLine("Attempting to upload profile photo for user");
+
+                data.Id = userId;
+                await mediator.Send(new ChangeUserAvatarCommand(data));
+
+                Console.WriteLine("Profile photo updated successfully for user Fetching updated user profile.");
+
+                var result = await mediator.Send(new GetUserProfileQuery(data.Id));
+
+                if (result == null)
+                {
+                    Console.WriteLine("Failed to fetch updated profile for user after uploading photo.");
+                    return NotFound("User profile not found.");
+                }
+
+                Console.WriteLine("Successfully retrieved updated profile for user after photo upload.");
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while uploading profile photo for user." + ex);
+                return BadRequest("Something went wrong.");
+            }
+        }
+
+
         [HttpGet("GetUserProfile")]
         public async Task<ActionResult<GiveUserProfileDTO>> GetUserProfile()
         {
@@ -36,6 +78,29 @@ namespace OutOfOffice.WebApi.Controllers
                 return NotFound("There is no information.");
             }
             return Ok(result);
+        }
+
+        [HttpPost("UpdateProfile")]
+        public async Task<ActionResult> UpdateProfile([FromBody] ChangeProfileDTO data)
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return NotFound("User ID not found.");
+            }
+
+            data.Id= userId;
+
+            var result = await mediator.Send(new ChangeProfileCommand(data));
+
+            if (result)
+            {
+                return Ok();
+            }
+            return BadRequest();
+
         }
 
         [HttpPost("FinishRegistration")]
@@ -109,6 +174,8 @@ namespace OutOfOffice.WebApi.Controllers
 
             return Ok(result);
         }
+
+
 
     }
 }

@@ -35,13 +35,22 @@ namespace OutOfOffice.Application.UseCases.Handlers.QueryHandlers
                     };
                     return unRegResult;
                 }
-
+                string partnerName = "";
                 var userModel = await dbContext.Employees.FirstOrDefaultAsync(x=>x.Id==request.userId);
+                if (userModel != null)
+                {
+                    var partner = await dbContext.Employees.FirstOrDefaultAsync(x => x.Id == userModel.PeoplePartnerID);
+                    if (partner != null)
+                    {
+                        partnerName=partner.FullName;
+                    }
+                }
+
                 GiveUserProfileDTO result = new GiveUserProfileDTO
                 {
                     Id = userModel.Id,
                     FullName = userModel.FullName,
-                    PeoplePartnerID = userModel.PeoplePartnerID,
+                    PeoplePartnerID = partnerName,
                     OutOfOfficeBalance = userModel.OutOfOfficeBalance,
                     Photo = userModel.Photo,
                     Position = userModel.Position.ToString(),
