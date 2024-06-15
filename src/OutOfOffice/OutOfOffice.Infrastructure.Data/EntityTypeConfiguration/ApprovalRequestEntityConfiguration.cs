@@ -24,7 +24,7 @@ namespace OutOfOffice.Infrastructure.Data.EntityTypeConfiguration
                .HasAnnotation("DatabaseGenerated", DatabaseGeneratedOption.Identity);
 
             builder.Property(ar => ar.ApproverId)
-               .IsRequired();
+                 .IsRequired(false);
 
             builder.HasOne(ar => ar.Approver)
                .WithMany(x=>x.ApprovalRequests)

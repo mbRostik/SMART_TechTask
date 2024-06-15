@@ -80,6 +80,8 @@ namespace OutOfOffice.WebApi.Controllers
             return Ok(result);
         }
 
+
+
         [HttpPost("UpdateProfile")]
         public async Task<ActionResult> UpdateProfile([FromBody] ChangeProfileDTO data)
         {
@@ -269,5 +271,44 @@ namespace OutOfOffice.WebApi.Controllers
             return result;
         }
 
+        [HttpPost("AddLeaveRequest")]
+        public async Task<ActionResult<bool>> AddLeaveRequest([FromBody] AddLeaveRequestDTO data)
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return NotFound("User ID not found.");
+            }
+            data.Id = userId;
+            var result = await mediator.Send(new AddLeaveRequestCommand(data));
+
+            return result;
+        }
+
+        [HttpPost("GetSortedUserProjects")]
+        public async Task<ActionResult<List<GiveProjectDTO>>> GetSortedUserProjects([FromBody] GetSortedProjectsDTO data)
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return NotFound("User ID not found.");
+            }
+            var result = await mediator.Send(new GetSortedUserProjectsQuery(data, userId));
+
+            return result;
+        }
+
+        [HttpPost("GetSortedUserLeaveRequests")]
+        public async Task<ActionResult<List<GiveLeaveRequestDTO>>> GetSortedUserLeaveRequests([FromBody] GetSortedFilteredLeaveRequestDTO data)
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return NotFound("User ID not found.");
+            }
+            var result = await mediator.Send(new GetSortedUserLeaveRequestsQuery(data, userId));
+
+            return result;
+        }
     }
 }

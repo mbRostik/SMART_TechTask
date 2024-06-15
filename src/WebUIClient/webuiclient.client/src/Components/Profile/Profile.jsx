@@ -8,6 +8,7 @@ import { useAuth } from './../AuthProvider';
 import config from '../../config.json';
 import './Profile.css'
 import { ToastContainer, toast } from 'react-toastify';
+import ProfileLeaveRequests from './ProfileLeaveRequests/ProfileLeaveRequests';
 
 const Profile = () => {
     const [isHovered, setIsHovered] = useState(false);
@@ -187,44 +188,47 @@ const Profile = () => {
             ) : isAuthorized === false ? (
                 <div>UnAuthorized</div>
             ) : (
+                <div>
+                            <div className="ProfileDiv">
+                                <div className="Left_ProfileDiv">
+                                    <div className="avatar-container" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                                        <img src={userData.photo ? `data:image/jpeg;base64,${userData.photo}` : "/NoPhoto.jpg"} alt="Avatar" className="avatar" />
+                                        <div className="buttons-container">
+                                            <label className="edit-button">
+                                                New
+                                                <input type="file" name="clientAvatar" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} capture="false" />
+                                            </label>
 
-                <div className="ProfileDiv">
-                    <div className="Left_ProfileDiv">
-                        <div className="avatar-container" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-                            <img src={userData.photo ? `data:image/jpeg;base64,${userData.photo}` : "/NoPhoto.jpg"} alt="Avatar" className="avatar" />
-                            <div className="buttons-container">
-                                <label className="edit-button">
-                                    New
-                                    <input type="file" name="clientAvatar" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} capture="false" />
-                                </label>
-
-                                <label className="edit-button" onClick={handleImageDelete}>
-                                    Delete
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="Right_ProfileDiv">
-                        
-                                <h3>{userData.fullName}</h3>
-                                <div className="Right_ProfileDiv_Title">
-                                    <input
-                                        type="text"
-                                        value={peoplePartnerID }
-                                        onChange={(e) => setPeoplePartnerID(e.target.value)}
-                                        className="input-date"
-                                    />
-                                     -(Input HR Name to change)
+                                            <label className="edit-button" onClick={handleImageDelete}>
+                                                Delete
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
-                                <p>{userData.position}</p>
-                                <p>{userData.status}</p>
-                                <p>{userData.subdivision}</p>
-                                <div onClick={handleSaveChanges}  className="Brown_Profile_Button">Save Changes</div>
-                    </div>
+                                <div className="Right_ProfileDiv">
+
+                                    <h3>{userData.fullName}</h3>
+                                    <div className="Right_ProfileDiv_Title">
+                                        <input
+                                            type="text"
+                                            value={peoplePartnerID}
+                                            onChange={(e) => setPeoplePartnerID(e.target.value)}
+                                            className="input-date"
+                                        />
+                                        -(Input HR Name to change)
+                                    </div>
+                                    <p>{userData.position}</p>
+                                    <p>{userData.status}</p>
+                                    <p>{userData.subdivision}</p>
+                                    <div onClick={handleSaveChanges} className="Brown_Profile_Button">Save Changes</div>
+                                </div>
 
 
+                            </div>
+
+                            <ProfileLeaveRequests />
                 </div>
-
+                
 
             )}
         </div>

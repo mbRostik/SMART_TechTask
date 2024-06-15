@@ -13,7 +13,7 @@ using OutOfOffice.Infrastructure.Data;
 namespace OutOfOffice.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(OutOfOfficeDbContext))]
-    [Migration("20240615124051_Migra")]
+    [Migration("20240615194026_Migra")]
     partial class Migra
     {
         /// <inheritdoc />
@@ -36,7 +36,6 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ApproverId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Comment")
@@ -135,17 +134,17 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("Submited");
+                        .HasDefaultValue("Submitted");
 
                     b.HasKey("Id");
 
@@ -213,8 +212,7 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                     b.HasOne("OutOfOffice.Domain.Employees.Employee", "Approver")
                         .WithMany("ApprovalRequests")
                         .HasForeignKey("ApproverId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("OutOfOffice.Domain.Leave_Requests.LeaveRequest", "LeaveRequest")
                         .WithMany("ApprovalRequests")

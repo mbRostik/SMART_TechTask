@@ -8,6 +8,7 @@ namespace OutOfOffice.Application.Contracts.DTOs.ChangeDTOs
 {
     public class AddLeaveRequestDTO
     {
+        public string Id { get; set; } = "";
         public string AbsenceReason { get; set; } = "";
 
         public DateOnly StartDate {  get; set; }
@@ -15,8 +16,6 @@ namespace OutOfOffice.Application.Contracts.DTOs.ChangeDTOs
         public DateOnly EndDate { get; set; }
 
         public string Comment { get; set; } = "";
-
-        public string Status { get; set; } = "";
 
     }
 }

@@ -54,10 +54,10 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AbsenceReason = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    EndDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "Submited")
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "Submitted")
                 },
                 constraints: table =>
                 {
@@ -98,7 +98,7 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ApproverId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ApproverId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     LeaveRequestId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "New"),
                     Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true)

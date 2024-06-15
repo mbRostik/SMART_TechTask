@@ -10,6 +10,7 @@ namespace OutOfOffice.Domain.Approval_Requests.Enums
     {
         New,
         Approved,
-        Rejected
+        Rejected,
+        Canceled
     }
 }
