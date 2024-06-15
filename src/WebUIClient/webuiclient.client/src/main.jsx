@@ -12,6 +12,7 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-route
 import Employees from './Components/Employees/Employees';
 import Profile from './Components/Profile/Profile';
 import Project from './Components/Project/Project';
+import ProjectDetails from './Components/Project/ProjectDetails/ProjectDetails';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -30,6 +31,7 @@ function AppContainer() {
                     <Route path="/employees" element={<Employees />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/projects" element={<Project />} />
+                    <Route path="/ProjectDetails/:id" element={<ProjectDetails />} />
 
                     </Routes>
                 </div>

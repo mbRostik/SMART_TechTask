@@ -58,6 +58,21 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                     b.ToTable("ApprovalRequests");
                 });
 
+            modelBuilder.Entity("OutOfOffice.Domain.EmployeeProject", b =>
+                {
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ProjectId", "EmployeeId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("EmployeeProjects");
+                });
+
             modelBuilder.Entity("OutOfOffice.Domain.Employees.Employee", b =>
                 {
                     b.Property<string>("Id")
@@ -209,6 +224,25 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                     b.Navigation("LeaveRequest");
                 });
 
+            modelBuilder.Entity("OutOfOffice.Domain.EmployeeProject", b =>
+                {
+                    b.HasOne("OutOfOffice.Domain.Employees.Employee", "Employee")
+                        .WithMany("EmployeeProjects")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("OutOfOffice.Domain.Projects.Project", "Project")
+                        .WithMany("EmployeeProjects")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("OutOfOffice.Domain.Employees.Employee", b =>
                 {
                     b.HasOne("OutOfOffice.Domain.Employees.Employee", "PeoplePartner")
@@ -245,6 +279,8 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                 {
                     b.Navigation("ApprovalRequests");
 
+                    b.Navigation("EmployeeProjects");
+
                     b.Navigation("LeaveRequests");
 
                     b.Navigation("Projects");
@@ -253,6 +289,11 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
             modelBuilder.Entity("OutOfOffice.Domain.Leave_Requests.LeaveRequest", b =>
                 {
                     b.Navigation("ApprovalRequests");
+                });
+
+            modelBuilder.Entity("OutOfOffice.Domain.Projects.Project", b =>
+                {
+                    b.Navigation("EmployeeProjects");
                 });
 #pragma warning restore 612, 618
         }

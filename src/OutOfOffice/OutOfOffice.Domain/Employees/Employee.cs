@@ -26,6 +26,8 @@ namespace OutOfOffice.Domain.Employees
         public List<LeaveRequest> LeaveRequests { get; set; }
         public List<ApprovalRequest> ApprovalRequests { get; set; }
         public List<Project> Projects { get; set; }
+        public List<EmployeeProject> EmployeeProjects { get; set; }
+
     }
 
 }

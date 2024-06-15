@@ -118,6 +118,28 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "EmployeeProjects",
+                columns: table => new
+                {
+                    EmployeeId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProjectId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployeeProjects", x => new { x.ProjectId, x.EmployeeId });
+                    table.ForeignKey(
+                        name: "FK_EmployeeProjects_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_EmployeeProjects_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ApprovalRequests_ApproverId",
                 table: "ApprovalRequests",
@@ -127,6 +149,11 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                 name: "IX_ApprovalRequests_LeaveRequestId",
                 table: "ApprovalRequests",
                 column: "LeaveRequestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmployeeProjects_EmployeeId",
+                table: "EmployeeProjects",
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_PeoplePartnerID",
@@ -151,13 +178,16 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                 name: "ApprovalRequests");
 
             migrationBuilder.DropTable(
-                name: "Projects");
+                name: "EmployeeProjects");
 
             migrationBuilder.DropTable(
                 name: "UnRegisteredUsers");
 
             migrationBuilder.DropTable(
                 name: "LeaveRequests");
+
+            migrationBuilder.DropTable(
+                name: "Projects");
 
             migrationBuilder.DropTable(
                 name: "Employees");

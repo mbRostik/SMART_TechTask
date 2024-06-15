@@ -19,6 +19,8 @@ namespace OutOfOffice.Domain.Projects
         public string? Comment { get; set; }
         public ProjectStatus Status { get; set; }
         public Employee ProjectManager { get; set; }
+
+        public List<EmployeeProject> EmployeeProjects { get; set; }
     }
 
 }

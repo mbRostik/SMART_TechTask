@@ -121,8 +121,11 @@ function Project() {
         }
     };
 
-
+    const handleProjectClick = (id) => {
+        window.location.href = `/ProjectDetails/${id}`;
+    };
     useEffect(() => {
+        
         const SetData = async () => {
             setLoadingState(true);
             if (userData.position === "PMManager" || userData.position === "HRManager") {
@@ -212,7 +215,7 @@ function Project() {
                                     <tbody className="project-table-body">
                                         {projectsData.map((project, index) => (
                                             <tr key={index} className="project-row">
-                                                <td className="project-cell">{project.id}</td>
+                                                <td onClick={() => handleProjectClick(project.id)} className="project-cell">{project.id}</td>
                                                 <td className="project-cell" onClick={() => handleRowClick(project.id)}>
                                                     {userData.position === 'PMManager' ? (
                                                         <select

@@ -23,6 +23,7 @@ namespace OutOfOffice.Infrastructure.Data
         public DbSet<ApprovalRequest> ApprovalRequests { get; set; }
         public DbSet<UnRegisteredUser> UnRegisteredUsers { get; set; }
 
+        public DbSet<EmployeeProject> EmployeeProjects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

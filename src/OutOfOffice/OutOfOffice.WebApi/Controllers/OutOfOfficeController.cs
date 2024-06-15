@@ -232,5 +232,42 @@ namespace OutOfOffice.WebApi.Controllers
 
             return BadRequest();
         }
+
+        [Authorize(Policy = "RequirePMManagerRole")]
+        [HttpGet("GetProjectById/{id}")]
+        public async Task<ActionResult<GiveProjectWithDetailsDTO>> GetProjectById(string id)
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return NotFound("User ID not found.");
+            }
+            try
+            {
+                int iD = int.Parse(id);
+                var result = await mediator.Send(new GetProjectByIdQuery(iD));
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return BadRequest();
+            }
+        }
+
+        [Authorize(Policy = "RequirePMManagerRole")]
+        [HttpPost("AddEmployeeToTheProject")]
+        public async Task<ActionResult<bool>> AddEmployeeToTheProject([FromBody] AddEmployeeToTheProjectDTO data)
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return NotFound("User ID not found.");
+            }
+
+            var result = await mediator.Send(new AddEmployeeToTheProjectCommand(data));
+            return result;
+        }
+
     }
 }

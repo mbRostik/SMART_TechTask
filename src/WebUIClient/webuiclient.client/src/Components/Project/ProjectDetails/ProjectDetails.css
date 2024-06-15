@@ -1,0 +1,44 @@
+.project-info-container {
+    margin-top: 50px;
+    color: black;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.project-info {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+    .project-info h2 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #333;
+        text-align: center;
+    }
+
+    .project-info p {
+        margin-bottom: 10px;
+        font-size: 18px;
+        color: #555;
+    }
+
+    .project-info strong {
+        font-weight: bold;
+    }
+
+.EmployeeImage {
+    height: 100px;
+    width: 100px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.employee-card{
+    display: flex;
+    align-content: center;
+    align-items: center;
+    gap:20px;
+}
