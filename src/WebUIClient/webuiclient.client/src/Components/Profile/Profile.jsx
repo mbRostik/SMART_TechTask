@@ -9,6 +9,8 @@ import config from '../../config.json';
 import './Profile.css'
 import { ToastContainer, toast } from 'react-toastify';
 import ProfileLeaveRequests from './ProfileLeaveRequests/ProfileLeaveRequests';
+import ProfileProject from './ProfileProjects/ProfileProject';
+
 
 const Profile = () => {
     const [isHovered, setIsHovered] = useState(false);
@@ -225,8 +227,13 @@ const Profile = () => {
 
 
                             </div>
-
+                            
                             <ProfileLeaveRequests />
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                            <h2>Projects</h2>
+                            <ProfileProject />
                 </div>
                 
 

@@ -310,5 +310,35 @@ namespace OutOfOffice.WebApi.Controllers
 
             return result;
         }
+
+
+        [Authorize(Policy = "RequireHROrPMManagerRole")]
+        [HttpPost("GetSortedApprovalRequests")]
+        public async Task<ActionResult<List<GiveApprovalRequestDTO>>> GetSortedApprovalRequests([FromBody] GetSortedFilteredApprovalRequestDTO data)
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return NotFound("User ID not found.");
+            }
+            var result = await mediator.Send(new GetSortedApprovalRequestQuery(data, userId));
+
+            return result;
+        }
+
+        [Authorize(Policy = "RequireHROrPMManagerRole")]
+        [HttpPost("ChangeApprovalRequest")]
+        public async Task<ActionResult<bool>> ChangeApprovalRequest([FromBody] ChangeApprovalRequestDTO data)
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return NotFound("User ID not found.");
+            }
+            var result = await mediator.Send(new ChangeApprovalRequestCommand(data, userId));
+
+            return result;
+        }
+
     }
 }

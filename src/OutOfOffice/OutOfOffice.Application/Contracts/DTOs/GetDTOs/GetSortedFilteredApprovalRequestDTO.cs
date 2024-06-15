@@ -8,6 +8,7 @@ namespace OutOfOffice.Application.Contracts.DTOs.GetDTOs
 {
     public class GetSortedFilteredApprovalRequestDTO
     {
+        
         public string? ColumnName { get; set; } = "";
         public bool Descending { get; set; } = true;
 

@@ -33,9 +33,6 @@ const NavBar = () => {
                         <div>Approval Requests</div>
                     </NavLink>
 
-                    <NavLink to="/menu" className="nav-item">
-                        <div>Leave Requests</div>
-                    </NavLink>
 
                     <NavLink to="/projects" className="nav-item">
                         <div>Projects</div>
