@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
 {
@@ -42,6 +43,10 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
                     Photo = new byte[0]
                 };
 
+                var partner = await dbContext.Employees.FirstOrDefaultAsync(x=>x.Id==request.model.PeoplePartnerID);
+                if(partner != null && partner.Position==Position.HRManager) {
+                    temp.PeoplePartnerID = partner.Id;
+                }
                 await dbContext.Employees.AddAsync(temp);
                 await dbContext.SaveChangesAsync();
                 return true;

@@ -57,7 +57,7 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "New")
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "Submited")
                 },
                 constraints: table =>
                 {
@@ -76,21 +76,15 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProjectType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    StartDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    EndDate = table.Column<DateOnly>(type: "date", nullable: true),
                     ProjectManagerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "Active"),
-                    EmployeeId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "Active")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projects", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Projects_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Projects_Employees_ProjectManagerId",
                         column: x => x.ProjectManagerId,
@@ -142,11 +136,6 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_LeaveRequests_EmployeeId",
                 table: "LeaveRequests",
-                column: "EmployeeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Projects_EmployeeId",
-                table: "Projects",
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(

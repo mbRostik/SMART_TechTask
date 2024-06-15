@@ -40,12 +40,13 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
                 }
 
                 var partnerId = await dbContext.Employees.FirstOrDefaultAsync(x => x.FullName == request.model.PartnerName).Select(x=>x.Id);
-
+                var partner = await dbContext.Employees
+                    .Where(x => x.FullName.Contains(request.model.PartnerName))
+                    .FirstOrDefaultAsync();
                 Employee employee = new Employee
                 {
                     Id = request.userId,
                     FullName = unRegUser.UserName,
-                    PeoplePartnerID = partnerId,
                     Position = (Position)Enum.Parse(typeof(Position), request.model.Position),
                     Status = (EmployeeStatus)Enum.Parse(typeof(EmployeeStatus), request.model.EmployeeStatus),
                     Subdivision = (Subdivision)Enum.Parse(typeof(Subdivision), request.model.Subdivision),
@@ -53,6 +54,15 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
                     Photo = new byte[0]
                 };
 
+                if (partner != null && partner.Position == Position.HRManager)
+                {
+                    employee.PeoplePartnerID = partner.Id;
+                }
+                if (partner == null)
+                {
+                    employee.PeoplePartnerID =null;
+
+                }
                 var model = await dbContext.Employees.AddAsync(employee);
 
                 UserPositionSetEvent userPositionSetEvent = new UserPositionSetEvent

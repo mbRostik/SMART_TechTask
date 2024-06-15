@@ -8,7 +8,7 @@ namespace OutOfOffice.Domain.Leave_Requests.Enums
 {
     public enum LeaveRequestStatus
     {
-        New,
+        Submited,
         Approved,
         Rejected
     }

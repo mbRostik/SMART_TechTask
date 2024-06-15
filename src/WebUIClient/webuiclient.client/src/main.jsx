@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Employees from './Components/Employees/Employees';
 import Profile from './Components/Profile/Profile';
+import Project from './Components/Project/Project';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -28,6 +29,7 @@ function AppContainer() {
                         <Route path="/" element={<App />} />
                     <Route path="/employees" element={<Employees />} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/projects" element={<Project />} />
 
                     </Routes>
                 </div>

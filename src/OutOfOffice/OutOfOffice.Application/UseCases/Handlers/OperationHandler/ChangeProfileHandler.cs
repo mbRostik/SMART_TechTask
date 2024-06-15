@@ -41,11 +41,16 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
                 {
                     return false;
                 }
+                if(partner!=null && partner.Position==Position.HRManager)
+                {
+                    user.PeoplePartnerID = partner.Id;
+                    await dbContext.SaveChangesAsync();
+                    return true;
 
-                user.PeoplePartnerID = partner.Id;
-                await dbContext.SaveChangesAsync();
-                
-                return true;
+                }
+                return false;
+
+
             }
             catch (Exception ex)
             {

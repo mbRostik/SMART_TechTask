@@ -128,7 +128,7 @@ function Employees() {
         };
         SetData();
         setLoadingState(false);
-    }, [sorting, filters]);
+    }, [sorting, filters, userData]);
 
     const handleSave = async (employee) => {
         try {

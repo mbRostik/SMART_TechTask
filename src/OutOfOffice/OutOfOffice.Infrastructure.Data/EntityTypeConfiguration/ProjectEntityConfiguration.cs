@@ -19,36 +19,37 @@ namespace OutOfOffice.Infrastructure.Data.EntityTypeConfiguration
             builder.HasKey(x => x.Id);
 
             builder.Property(c => c.Id)
-               .IsRequired()
-               .ValueGeneratedOnAdd()
-               .HasAnnotation("DatabaseGenerated", DatabaseGeneratedOption.Identity);
+                .IsRequired()
+                .ValueGeneratedOnAdd()
+                .HasAnnotation("DatabaseGenerated", DatabaseGeneratedOption.Identity);
 
             builder.Property(p => p.ProjectType)
-               .IsRequired()
-               .HasConversion<string>();
+                .IsRequired()
+                .HasConversion<string>();
 
             builder.Property(p => p.StartDate)
-               .IsRequired();
+                .IsRequired();
 
             builder.Property(p => p.EndDate)
-               .IsRequired(false);
+                .IsRequired(false);
 
             builder.Property(p => p.ProjectManagerId)
-               .IsRequired();
+                .IsRequired();
 
             builder.HasOne(p => p.ProjectManager)
-               .WithMany()
-               .HasForeignKey(p => p.ProjectManagerId)
-               .OnDelete(DeleteBehavior.NoAction);
+                .WithMany(e => e.Projects)
+                .HasForeignKey(p => p.ProjectManagerId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Property(p => p.Comment)
-               .HasMaxLength(1000);  
+                .HasMaxLength(1000);
 
             builder.Property(p => p.Status)
-               .IsRequired()
-               .HasDefaultValue(ProjectStatus.Active)
-               .HasConversion<string>()
-               .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+                .IsRequired()
+                .HasDefaultValue(ProjectStatus.Active)
+                .HasConversion<string>()
+                .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
         }
     }
+
 }

@@ -49,7 +49,7 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
                 }
 
                 var partner = await dbContext.Employees.FirstOrDefaultAsync(x=>x.Id== request.model.PeoplePartnerID);
-                if (partner != null) { user.PeoplePartnerID = partner.Id; }
+                if (partner != null&& partner.Position==Position.HRManager) { user.PeoplePartnerID = partner.Id; }
 
                 UserChangedEvent userPositionSetEvent = new UserChangedEvent
                 {

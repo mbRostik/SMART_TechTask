@@ -127,7 +127,7 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(max)")
-                        .HasDefaultValue("New");
+                        .HasDefaultValue("Submited");
 
                     b.HasKey("Id");
 
@@ -149,11 +149,8 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<string>("EmployeeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly?>("EndDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("ProjectManagerId")
                         .IsRequired()
@@ -163,8 +160,8 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -173,8 +170,6 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
                         .HasDefaultValue("Active");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("ProjectManagerId");
 
@@ -237,12 +232,8 @@ namespace OutOfOffice.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("OutOfOffice.Domain.Projects.Project", b =>
                 {
-                    b.HasOne("OutOfOffice.Domain.Employees.Employee", null)
-                        .WithMany("Projects")
-                        .HasForeignKey("EmployeeId");
-
                     b.HasOne("OutOfOffice.Domain.Employees.Employee", "ProjectManager")
-                        .WithMany()
+                        .WithMany("Projects")
                         .HasForeignKey("ProjectManagerId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();

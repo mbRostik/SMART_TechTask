@@ -19,15 +19,13 @@ namespace OutOfOffice.Domain.Employees
         public string? PeoplePartnerID { get; set; }
         public int OutOfOfficeBalance { get; set; }
         public byte[]? Photo { get; set; }
-        public Subdivision Subdivision { get; set; } 
-        public Position Position { get; set; }  
+        public Subdivision Subdivision { get; set; }
+        public Position Position { get; set; }
         public EmployeeStatus Status { get; set; }
         public Employee PeoplePartner { get; set; }
-
         public List<LeaveRequest> LeaveRequests { get; set; }
         public List<ApprovalRequest> ApprovalRequests { get; set; }
         public List<Project> Projects { get; set; }
-
-
     }
+
 }

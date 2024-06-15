@@ -17,8 +17,6 @@ const Profile = () => {
         setUserDataState } = useAuth();
 
 
-
-
     const handleMouseEnter = () => {
         setIsHovered(true);
     }
@@ -98,7 +96,6 @@ const Profile = () => {
 
         return acceptedImageTypes.includes(file.type);
     };
-
 
     const handleImageDelete = async (e) => {
         setLoadingState(true);

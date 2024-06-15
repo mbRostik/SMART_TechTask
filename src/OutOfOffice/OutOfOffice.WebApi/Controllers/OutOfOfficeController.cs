@@ -176,6 +176,61 @@ namespace OutOfOffice.WebApi.Controllers
         }
 
 
+        [Authorize(Policy = "RequireHROrPMManagerRole")]
+        [HttpPost("GetSortedProjectTable")]
+        public async Task<ActionResult<List<GiveProjectDTO>>> GetSortedProjectTable([FromBody] GetSortedProjectsDTO data)
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return NotFound("User ID not found.");
+            }
+
+            var result = await mediator.Send(new GetSortedProjectTableQuery(data));
+
+            return Ok(result);
+        }
+
+        [Authorize(Policy = "RequirePMManagerRole")]
+        [HttpPost("ChangeProject")]
+        public async Task<ActionResult<List<GiveProjectDTO>>> ChangeProject([FromBody] ChangeProjectDTO data)
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return NotFound("User ID not found.");
+            }
+
+            var result = await mediator.Send(new ChangeProjectCommand(data));
+
+            return Ok(result);
+        }
+
+
+        [Authorize(Policy = "RequirePMManagerRole")]
+        [HttpPost("CreateProject")]
+        public async Task<ActionResult<List<GiveProjectDTO>>> CreateProject([FromBody] AddProjectDTO data)
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return NotFound("User ID not found.");
+            }
+
+            var result = await mediator.Send(new CreateProjectCommand(data));
+            if (result)
+            {
+                return Ok();
+
+            }
+
+            return BadRequest();
+        }
     }
 }

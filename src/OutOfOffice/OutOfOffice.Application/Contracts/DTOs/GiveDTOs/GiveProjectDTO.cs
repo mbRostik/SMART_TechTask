@@ -2,23 +2,22 @@
 using OutOfOffice.Domain.Projects.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OutOfOffice.Domain.Projects
+namespace OutOfOffice.Application.Contracts.DTOs.GiveDTOs
 {
-    public class Project
+    public class GiveProjectDTO
     {
         public int Id { get; set; }
-        public ProjectType ProjectType { get; set; }
+        public string ProjectType { get; set; }
         public DateOnly StartDate { get; set; }
+
         public DateOnly? EndDate { get; set; }
         public string ProjectManagerId { get; set; }
-        public string? Comment { get; set; }
-        public ProjectStatus Status { get; set; }
-        public Employee ProjectManager { get; set; }
-    }
 
+        public string? Comment { get; set; }
+        public string Status { get; set; }
+    }
 }

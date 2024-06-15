@@ -17,30 +17,32 @@ namespace OutOfOffice.Infrastructure.Data.EntityTypeConfiguration
             builder.HasKey(x => x.Id);
 
             builder.Property(e => e.FullName)
-             .IsRequired()
-             .HasMaxLength(100);
+                .IsRequired()
+                .HasMaxLength(100);
 
             builder.Property(e => e.OutOfOfficeBalance)
-              .IsRequired();
+                .IsRequired();
 
             builder.Property(e => e.Status)
-             .HasConversion<string>()
-             .IsRequired();
+                .HasConversion<string>()
+                .IsRequired();
 
             builder.Property(e => e.Position)
-             .HasConversion<string>()
-             .IsRequired();
+                .HasConversion<string>()
+                .IsRequired();
 
             builder.Property(e => e.Subdivision)
-             .HasConversion<string>()
-             .IsRequired();
+                .HasConversion<string>()
+                .IsRequired();
 
             builder.HasOne(e => e.PeoplePartner)
-               .WithMany()
-               .HasForeignKey(e => e.PeoplePartnerID)
-               .OnDelete(DeleteBehavior.NoAction);
+                .WithMany()
+                .HasForeignKey(e => e.PeoplePartnerID)
+                .OnDelete(DeleteBehavior.NoAction);
+
             builder.Property(e => e.Photo)
-               .IsRequired(false);
+                .IsRequired(false);
         }
     }
+
 }
