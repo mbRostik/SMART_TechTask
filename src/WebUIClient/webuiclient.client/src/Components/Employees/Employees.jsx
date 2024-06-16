@@ -209,7 +209,7 @@ function Employees() {
                                                         <th className="sortable-column" onClick={() => handleSort('Position')}>Position</th>
                                                         <th className="sortable-column" onClick={() => handleSort('Status')}>Status</th>
                                                         <th className="sortable-column" onClick={() => handleSort('Subdivision')}>Subdivision</th>
-                                                        {userData.position === 'HRManager' || userData.position === 'Administrator' && <th className="actions-column">Actions</th>}
+                                                        {(userData.position === 'HRManager' || userData.position === 'Administrator') && <th className="actions-column">Actions</th>}
                                                     </tr>
                                                 </thead>
                                                 <tbody className="employee-table-body">
@@ -217,7 +217,7 @@ function Employees() {
                                                         <tr key={index} className="employee-row">
                                                             <td className="employee-cell">{employee.id}</td>
                                                             <td className="employee-cell" onClick={() => handleRowClick(employee.id)}>
-                                                                {userData.position === 'HRManager' || userData.position === 'Administrator' ? (
+                                                                {(userData.position === 'HRManager' || userData.position === 'Administrator') ? (
                                                                     <input
                                                                         type="text"
                                                                         className="employee-input"
@@ -229,7 +229,7 @@ function Employees() {
                                                                 )}
                                                             </td>
                                                             <td className="employee-cell">
-                                                                {userData.position === 'HRManager' || userData.position === 'Administrator' ? (
+                                                                {(userData.position === 'HRManager' || userData.position === 'Administrator') ? (
                                                                     <input
                                                                         type="number"
                                                                         className="employee-input"
@@ -241,7 +241,7 @@ function Employees() {
                                                                 )}
                                                             </td>
                                                             <td className="employee-cell">
-                                                                {userData.position === 'HRManager' || userData.position === 'Administrator' ? (
+                                                                {(userData.position === 'HRManager' || userData.position === 'Administrator') ? (
                                                                     <input
                                                                         type="text"
                                                                         className="employee-input"
@@ -253,7 +253,7 @@ function Employees() {
                                                                 )}
                                                             </td>
                                                             <td className="employee-cell">
-                                                                {userData.position === 'HRManager' || userData.position === 'Administrator' ? (
+                                                                {(userData.position === 'HRManager' || userData.position === 'Administrator') ? (
                                                                     <select
                                                                         className="employee-select"
                                                                         value={employee.position}
@@ -269,7 +269,7 @@ function Employees() {
                                                                 )}
                                                             </td>
                                                             <td className="employee-cell">
-                                                                {userData.position === 'HRManager' || userData.position === 'Administrator' ? (
+                                                                {(userData.position === 'HRManager' || userData.position === 'Administrator') ? (
                                                                     <select
                                                                         className="employee-select"
                                                                         value={employee.status}
@@ -283,7 +283,7 @@ function Employees() {
                                                                 )}
                                                             </td>
                                                             <td className="employee-cell">
-                                                                {userData.position === 'HRManager' || userData.position === 'Administrator' ? (
+                                                                { (userData.position === 'HRManager' || userData.position === 'Administrator') ? (
                                                                     <select
                                                                         className="employee-select"
                                                                         value={employee.subdivision}
@@ -296,7 +296,7 @@ function Employees() {
                                                                     employee.subdivision
                                                                 )}
                                                             </td>
-                                                            {userData.position === 'HRManager' || userData.position === 'Administrator' && (
+                                                            { (userData.position === 'HRManager' || userData.position === 'Administrator') && (
                                                                 <td className="employee-cell">
                                                                     <button className="save-button" onClick={() => handleSave(employee)}>Save</button>
                                                                 </td>
@@ -309,7 +309,7 @@ function Employees() {
 
 
                                         <div className="">
-                                            {userData && userData.position === 'HRManager' && (
+                                            {userData && (userData.position === 'PMManager' || userData.position === 'Administrator') && (
                                                 <>
                                                     <div className="create-employee-form">
                                                     <h2>Create New Employee</h2>

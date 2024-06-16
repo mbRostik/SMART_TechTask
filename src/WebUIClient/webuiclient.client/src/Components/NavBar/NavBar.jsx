@@ -25,18 +25,32 @@ const NavBar = () => {
                         </NavLink>
 
 
-                        <NavLink to="/employees" className="nav-item">
-                        <div>Employees</div>
-                    </NavLink>
+                        {(userData.position === 'PMManager' || userData.position === 'Administrator' || userData.position === 'HRManager') ? (
+                            <NavLink to="/employees" className="nav-item">
+                                <div>Employees</div>
+                            </NavLink>
+                        ) : (
+                            <></>
+                        )}
 
-                        <NavLink to="/approval-requests" className="nav-item">
-                        <div>Approval Requests</div>
-                    </NavLink>
+                        {(userData.position === 'PMManager' || userData.position === 'Administrator' || userData.position === 'HRManager') ? (
+                            <NavLink to="/approval-requests" className="nav-item">
+                                <div>Approval Requests</div>
+                            </NavLink>
+                        ) : (
+                            <></>
+                        )}
 
+                        
+                        {(userData.position === 'PMManager' || userData.position === 'Administrator' || userData.position === 'HRManager') ? (
+                            <NavLink to="/projects" className="nav-item">
+                                <div>Projects</div>
+                            </NavLink>
+                        ) : (
+                            <></>
+                        )}
 
-                    <NavLink to="/projects" className="nav-item">
-                        <div>Projects</div>
-                    </NavLink>
+                    
 
                     <NavLink to="/profile">
                         <img

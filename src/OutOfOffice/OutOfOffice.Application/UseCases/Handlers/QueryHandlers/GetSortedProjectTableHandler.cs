@@ -19,14 +19,18 @@ namespace OutOfOffice.Application.UseCases.Handlers.QueryHandlers
     {
 
         private readonly OutOfOfficeDbContext dbContext;
+        public readonly Serilog.ILogger _logger;
 
-        public GetSortedProjectTableHandler(OutOfOfficeDbContext dbContext)
+        public GetSortedProjectTableHandler(OutOfOfficeDbContext dbContext, Serilog.ILogger logger)
         {
             this.dbContext = dbContext;
+            _logger = logger;
         }
 
         public async Task<List<GiveProjectDTO>> Handle(GetSortedProjectTableQuery request, CancellationToken cancellationToken)
         {
+            _logger.Information("Handle method started with request: {Request}", request);
+
             try
             {
                 var query = dbContext.Projects.AsQueryable();
@@ -35,7 +39,8 @@ namespace OutOfOffice.Application.UseCases.Handlers.QueryHandlers
                 {
                     if (Enum.TryParse<ProjectStatus>(request.model.Status, out var status))
                     {
-                        query = query.Where(e => e.Status == status);
+                        query = query.Where(p => p.Status == status);
+                        _logger.Information("Filtering by Status: {Status}", status);
                     }
                 }
 
@@ -43,27 +48,30 @@ namespace OutOfOffice.Application.UseCases.Handlers.QueryHandlers
                 {
                     if (Enum.TryParse<ProjectType>(request.model.ProjectType, out var type))
                     {
-                        query = query.Where(e => e.ProjectType == type);
+                        query = query.Where(p => p.ProjectType == type);
+                        _logger.Information("Filtering by ProjectType: {ProjectType}", type);
                     }
                 }
-
-               
 
                 if (!string.IsNullOrEmpty(request.model.ColumnName))
                 {
                     var propertyInfo = typeof(Project).GetProperty(request.model.ColumnName);
                     if (propertyInfo == null)
                     {
-                        throw new ArgumentException($"Column '{request.model.ColumnName}' does not exist in the Project model :(((");
+                        var errorMessage = $"Column '{request.model.ColumnName}' does not exist in the Project model";
+                        _logger.Error(errorMessage);
+                        throw new ArgumentException(errorMessage);
                     }
 
                     if (request.model.Descending)
                     {
-                        query = query.OrderByDescending(e => EF.Property<object>(e, request.model.ColumnName));
+                        query = query.OrderByDescending(p => EF.Property<object>(p, request.model.ColumnName));
+                        _logger.Information("Sorting by {ColumnName} in descending order", request.model.ColumnName);
                     }
                     else
                     {
-                        query = query.OrderBy(e => EF.Property<object>(e, request.model.ColumnName));
+                        query = query.OrderBy(p => EF.Property<object>(p, request.model.ColumnName));
+                        _logger.Information("Sorting by {ColumnName} in ascending order", request.model.ColumnName);
                     }
                 }
 
@@ -75,22 +83,23 @@ namespace OutOfOffice.Application.UseCases.Handlers.QueryHandlers
                         StartDate = p.StartDate,
                         EndDate = p.EndDate,
                         ProjectManagerId = dbContext.Employees
-                        .Where(e => e.Id == p.ProjectManagerId)
-                        .Select(e => e.FullName)
-                        .FirstOrDefault(),
+                            .Where(e => e.Id == p.ProjectManagerId)
+                            .Select(e => e.FullName)
+                            .FirstOrDefault(),
                         Comment = p.Comment,
                         Status = p.Status.ToString()
                     })
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
+
+                _logger.Information("Handle method completed successfully with result count: {Count}", result.Count);
 
                 return result;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Pe4al kolu popalu v GetSortedEmployeeTableHandler: {ex.Message}");
+                _logger.Error(ex, "An error occurred in Handle method");
                 return null;
             }
         }
-
     }
 }

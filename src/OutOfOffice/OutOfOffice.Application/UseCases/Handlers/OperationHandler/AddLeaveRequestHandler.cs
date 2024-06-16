@@ -23,23 +23,33 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
 
         private readonly OutOfOfficeDbContext dbContext;
         private readonly IPublishEndpoint _publisher;
+        public readonly Serilog.ILogger _logger;
 
-        public AddLeaveRequestHandler(OutOfOfficeDbContext dbContext, IMediator mediator, IPublishEndpoint publisher)
+        public AddLeaveRequestHandler(OutOfOfficeDbContext dbContext, IMediator mediator, IPublishEndpoint publisher, Serilog.ILogger logger)
         {
             this.dbContext = dbContext;
             this.mediator = mediator;
             this._publisher = publisher;
+            _logger = logger;
         }
 
         public async Task<bool> Handle(AddLeaveRequestCommand request, CancellationToken cancellationToken)
         {
+            _logger.Information("Handle method started with request: {Request}", request);
+
             try
             {
-                var user = await dbContext.Employees.FirstOrDefaultAsync(X => X.Id == request.model.Id);
- 
-                LeaveRequest leaveRequest = new LeaveRequest
+                var user = await dbContext.Employees.FirstOrDefaultAsync(x => x.Id == request.model.Id, cancellationToken);
+                if (user == null)
                 {
-                    EmployeeId=user.Id,
+                    _logger.Warning("User not found with Id: {UserId}", request.model.Id);
+                    return false;
+                }
+                _logger.Information("Fetched user with Id: {UserId}", request.model.Id);
+
+                var leaveRequest = new LeaveRequest
+                {
+                    EmployeeId = user.Id,
                     AbsenceReason = (AbsenceReason)Enum.Parse(typeof(AbsenceReason), request.model.AbsenceReason),
                     StartDate = request.model.StartDate,
                     EndDate = request.model.EndDate,
@@ -47,24 +57,25 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
                     Status = LeaveRequestStatus.Submitted,
                 };
 
-                var model = await dbContext.LeaveRequests.AddAsync(leaveRequest);
-                await dbContext.SaveChangesAsync();
+                var model = await dbContext.LeaveRequests.AddAsync(leaveRequest, cancellationToken);
+                await dbContext.SaveChangesAsync(cancellationToken);
+                _logger.Information("Leave request created for UserId: {UserId} with LeaveRequestId: {LeaveRequestId}", user.Id, model.Entity.Id);
 
-
-                ApprovalRequest approvalRequest = new ApprovalRequest
+                var approvalRequest = new ApprovalRequest
                 {
                     LeaveRequestId = model.Entity.Id,
                     Status = ApprovalRequestStatus.New
                 };
 
-                await dbContext.ApprovalRequests.AddAsync(approvalRequest);
-                await dbContext.SaveChangesAsync();
+                await dbContext.ApprovalRequests.AddAsync(approvalRequest, cancellationToken);
+                await dbContext.SaveChangesAsync(cancellationToken);
+                _logger.Information("Approval request created for LeaveRequestId: {LeaveRequestId}", model.Entity.Id);
 
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error occurred while creating user: {ex.Message}");
+                _logger.Error(ex, "Error occurred while creating leave request for UserId: {UserId}", request.model.Id);
                 return false;
             }
         }

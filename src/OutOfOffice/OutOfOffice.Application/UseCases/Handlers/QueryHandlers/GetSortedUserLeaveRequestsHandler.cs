@@ -19,51 +19,60 @@ namespace OutOfOffice.Application.UseCases.Handlers.QueryHandlers
     {
 
         private readonly OutOfOfficeDbContext dbContext;
+        public readonly Serilog.ILogger _logger;
 
-        public GetSortedUserLeaveRequestsHandler(OutOfOfficeDbContext dbContext)
+        public GetSortedUserLeaveRequestsHandler(OutOfOfficeDbContext dbContext, Serilog.ILogger logger)
         {
             this.dbContext = dbContext;
+            _logger = logger;
         }
 
         public async Task<List<GiveLeaveRequestDTO>> Handle(GetSortedUserLeaveRequestsQuery request, CancellationToken cancellationToken)
         {
+            _logger.Information("Handle method started with request: {Request}", request);
+
             try
             {
-               
                 var query = dbContext.LeaveRequests.Where(x => x.EmployeeId == request.userId);
+                _logger.Information("Filtering by EmployeeId: {EmployeeId}", request.userId);
+
                 if (!string.IsNullOrEmpty(request.model.Status))
                 {
                     if (Enum.TryParse<LeaveRequestStatus>(request.model.Status, out var status))
                     {
                         query = query.Where(e => e.Status == status);
+                        _logger.Information("Filtering by Status: {Status}", status);
                     }
                 }
-                
+
                 if (!string.IsNullOrEmpty(request.model.AbsenceReason))
                 {
                     if (Enum.TryParse<AbsenceReason>(request.model.AbsenceReason, out var type))
                     {
                         query = query.Where(e => e.AbsenceReason == type);
+                        _logger.Information("Filtering by AbsenceReason: {AbsenceReason}", type);
                     }
                 }
-
-
 
                 if (!string.IsNullOrEmpty(request.model.ColumnName))
                 {
                     var propertyInfo = typeof(LeaveRequest).GetProperty(request.model.ColumnName);
                     if (propertyInfo == null)
                     {
-                        throw new ArgumentException($"Column '{request.model.ColumnName}' does not exist in the LeaveRequests model :(((");
+                        var errorMessage = $"Column '{request.model.ColumnName}' does not exist in the LeaveRequests model";
+                        _logger.Error(errorMessage);
+                        throw new ArgumentException(errorMessage);
                     }
 
                     if (request.model.Descending)
                     {
                         query = query.OrderByDescending(e => EF.Property<object>(e, request.model.ColumnName));
+                        _logger.Information("Sorting by {ColumnName} in descending order", request.model.ColumnName);
                     }
                     else
                     {
                         query = query.OrderBy(e => EF.Property<object>(e, request.model.ColumnName));
+                        _logger.Information("Sorting by {ColumnName} in ascending order", request.model.ColumnName);
                     }
                 }
 
@@ -75,22 +84,23 @@ namespace OutOfOffice.Application.UseCases.Handlers.QueryHandlers
                         StartDate = p.StartDate,
                         EndDate = p.EndDate,
                         EmployeeId = dbContext.Employees
-                        .Where(e => e.Id == p.EmployeeId)
-                        .Select(e => e.FullName)
-                        .FirstOrDefault(),
+                            .Where(e => e.Id == p.EmployeeId)
+                            .Select(e => e.FullName)
+                            .FirstOrDefault(),
                         Comment = p.Comment,
                         Status = p.Status.ToString()
                     })
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
+
+                _logger.Information("Handle method completed successfully with result count: {Count}", result.Count);
 
                 return result;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Pe4al kolu popalu v GetSortedUserLeaveRequestsHandler: {ex.Message}");
+                _logger.Error(ex, "An error occurred in Handle method");
                 return null;
             }
         }
-
     }
 }

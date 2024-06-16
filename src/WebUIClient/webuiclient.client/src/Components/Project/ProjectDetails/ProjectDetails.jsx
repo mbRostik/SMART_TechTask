@@ -153,7 +153,7 @@ const ProjectDetails = () => {
                             <br></br>
 
                      <div className="">
-                                {userData && userData.position === 'PMManager' && (
+                                {userData && (userData.position === 'PMManager' || userData.position === 'Administrator') && (
                                     <>
                                         <div className="create-project-form">
                                             <h2>Add employee to the project</h2>

@@ -17,14 +17,18 @@ namespace OutOfOffice.Application.UseCases.Handlers.QueryHandlers
     {
 
         private readonly OutOfOfficeDbContext dbContext;
+        public readonly Serilog.ILogger _logger;
 
-        public GetSortedEmployeeTableHandler(OutOfOfficeDbContext dbContext)
+        public GetSortedEmployeeTableHandler(OutOfOfficeDbContext dbContext, Serilog.ILogger logger)
         {
             this.dbContext = dbContext;
+            this._logger = logger;
         }
 
         public async Task<List<GiveUserProfileDTO>> Handle(GetSortedEmployeeTableQuery request, CancellationToken cancellationToken)
         {
+            _logger.Information("Handle method started with request: {Request}", request);
+
             try
             {
                 var query = dbContext.Employees.AsQueryable();
@@ -34,6 +38,7 @@ namespace OutOfOffice.Application.UseCases.Handlers.QueryHandlers
                     if (Enum.TryParse<EmployeeStatus>(request.model.Status, out var status))
                     {
                         query = query.Where(e => e.Status == status);
+                        _logger.Information("Filtering by Status: {Status}", status);
                     }
                 }
 
@@ -42,6 +47,7 @@ namespace OutOfOffice.Application.UseCases.Handlers.QueryHandlers
                     if (Enum.TryParse<Position>(request.model.Position, out var position))
                     {
                         query = query.Where(e => e.Position == position);
+                        _logger.Information("Filtering by Position: {Position}", position);
                     }
                 }
 
@@ -50,6 +56,7 @@ namespace OutOfOffice.Application.UseCases.Handlers.QueryHandlers
                     if (Enum.TryParse<Subdivision>(request.model.Subdivision, out var subdivision))
                     {
                         query = query.Where(e => e.Subdivision == subdivision);
+                        _logger.Information("Filtering by Subdivision: {Subdivision}", subdivision);
                     }
                 }
 
@@ -58,16 +65,20 @@ namespace OutOfOffice.Application.UseCases.Handlers.QueryHandlers
                     var propertyInfo = typeof(Employee).GetProperty(request.model.ColumnName);
                     if (propertyInfo == null)
                     {
-                        throw new ArgumentException($"Column '{request.model.ColumnName}' does not exist in the Employee model :(((");
+                        var errorMessage = $"Column '{request.model.ColumnName}' does not exist in the Employee model";
+                        _logger.Error(errorMessage);
+                        throw new ArgumentException(errorMessage);
                     }
 
                     if (request.model.Descending)
                     {
                         query = query.OrderByDescending(e => EF.Property<object>(e, request.model.ColumnName));
+                        _logger.Information("Sorting by {ColumnName} in descending order", request.model.ColumnName);
                     }
                     else
                     {
                         query = query.OrderBy(e => EF.Property<object>(e, request.model.ColumnName));
+                        _logger.Information("Sorting by {ColumnName} in ascending order", request.model.ColumnName);
                     }
                 }
 
@@ -84,16 +95,17 @@ namespace OutOfOffice.Application.UseCases.Handlers.QueryHandlers
                         Photo = e.Photo,
                         FullyRegistered = true
                     })
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
+
+                _logger.Information("Handle method completed successfully with result count: {Count}", result.Count);
 
                 return result;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Pe4al kolu popalu v GetSortedEmployeeTableHandler: {ex.Message}");
+                _logger.Error(ex, "An error occurred in Handle method");
                 return null;
             }
         }
-
     }
 }

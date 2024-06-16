@@ -19,42 +19,55 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
 
         private readonly OutOfOfficeDbContext dbContext;
         private readonly IPublishEndpoint _publisher;
+        public readonly Serilog.ILogger _logger;
 
-        public ChangeProfileHandler(OutOfOfficeDbContext dbContext, IMediator mediator, IPublishEndpoint publisher)
+        public ChangeProfileHandler(OutOfOfficeDbContext dbContext, IMediator mediator, IPublishEndpoint publisher, Serilog.ILogger logger)
         {
             this.dbContext = dbContext;
             this.mediator = mediator;
             this._publisher = publisher;
+            _logger = logger;
         }
 
         public async Task<bool> Handle(ChangeProfileCommand request, CancellationToken cancellationToken)
         {
+            _logger.Information("Handle method started with request: {Request}", request);
+
             try
             {
-               var user = await dbContext.Employees.FirstOrDefaultAsync(x=>x.Id==request.model.Id);
-               
-               var partner = await dbContext.Employees
-                    .Where(x => x.FullName.Contains(request.model.Partner))
-                    .FirstOrDefaultAsync();
-
+                var user = await dbContext.Employees.FirstOrDefaultAsync(x => x.Id == request.model.Id, cancellationToken);
                 if (user == null)
                 {
+                    _logger.Warning("User not found with Id: {UserId}", request.model.Id);
                     return false;
                 }
-                if(partner!=null && partner.Position==Position.HRManager)
+                _logger.Information("Fetched user with Id: {UserId}", request.model.Id);
+
+                var partner = await dbContext.Employees
+                    .Where(x => x.FullName.Contains(request.model.Partner))
+                    .FirstOrDefaultAsync(cancellationToken);
+                _logger.Information("Fetched partner with name containing: {PartnerName}", request.model.Partner);
+
+                if (partner != null && partner.Position == Position.HRManager)
                 {
                     user.PeoplePartnerID = partner.Id;
-                    await dbContext.SaveChangesAsync();
+                    _logger.Information("Updated PeoplePartnerID for UserId: {UserId} to {PeoplePartnerID}", request.model.Id, partner.Id);
+
+                    await dbContext.SaveChangesAsync(cancellationToken);
+                    _logger.Information("Changes saved to the database for UserId: {UserId}", user.Id);
+
                     return true;
-
                 }
+                else
+                {
+                    _logger.Warning("Partner not found or not an HRManager for UserId: {UserId}", request.model.Id);
+                }
+
                 return false;
-
-
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error occurred while creating user: {ex.Message}");
+                _logger.Error(ex, "Error occurred while changing profile for UserId: {UserId}", request.model.Id);
                 return false;
             }
         }

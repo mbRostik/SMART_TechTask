@@ -206,7 +206,7 @@ function Project() {
                                             <th className="sortable-column" onClick={() => handleSort('EndDate')}>End Date</th>
                                             <th className="sortable-column" onClick={() => handleSort('ProjectManagerId')}>Project Manager ID</th>
                                             <th className="sortable-column" onClick={() => handleSort('Comment')}>Comment</th>
-                                            {userData.position === 'PMManager' && <th className="actions-column">Actions</th>}
+                                                        {(userData.position === 'PMManager' || userData.position === 'Administrator') && <th className="actions-column">Actions</th>}
                                         </tr>
                                     </thead>
                                     <tbody className="project-table-body">
@@ -214,7 +214,7 @@ function Project() {
                                             <tr key={index} className="project-row">
                                                 <td onClick={() => handleProjectClick(project.id)} className="project-cell">{project.id}</td>
                                                 <td className="project-cell" onClick={() => handleRowClick(project.id)}>
-                                                    {userData.position === 'PMManager' || userData.position === 'Administrator'  ? (
+                                                    {(userData.position === 'PMManager' || userData.position === 'Administrator')  ? (
                                                         <select
                                                             className="project-select"
                                                             value={project.projectType}
@@ -229,7 +229,7 @@ function Project() {
                                                 </td>
 
                                                 <td className="project-cell" onClick={() => handleRowClick(project.id)}>
-                                                    {userData.position === 'PMManager' || userData.position === 'Administrator' ? (
+                                                    {(userData.position === 'PMManager' || userData.position === 'Administrator') ? (
                                                         <select
                                                             className="project-select"
                                                             value={project.status}
@@ -244,7 +244,7 @@ function Project() {
                                                 </td>
 
                                                 <td className="project-cell">
-                                                    {userData.position === 'PMManager' || userData.position === 'Administrator' ? (
+                                                    {(userData.position === 'PMManager' || userData.position === 'Administrator') ? (
                                                         <input
                                                             type="date"
                                                             className="project-input"
@@ -256,7 +256,7 @@ function Project() {
                                                     )}
                                                 </td>
                                                 <td className="project-cell">
-                                                    {userData.position === 'PMManager' || userData.position === 'Administrator' ? (
+                                                    {(userData.position === 'PMManager' || userData.position === 'Administrator') ? (
                                                         <input
                                                             type="date"
                                                             className="project-input"
@@ -268,7 +268,7 @@ function Project() {
                                                     )}
                                                 </td>
                                                 <td className="project-cell">
-                                                    {userData.position === 'PMManager' || userData.position === 'Administrator' ? (
+                                                    {(userData.position === 'PMManager' || userData.position === 'Administrator') ? (
                                                         <input
                                                             type="text"
                                                             className="project-input"
@@ -280,7 +280,7 @@ function Project() {
                                                     )}
                                                 </td>
                                                 <td className="project-cell">
-                                                    {userData.position === 'PMManager' || userData.position === 'Administrator' ? (
+                                                    {(userData.position === 'PMManager' || userData.position === 'Administrator') ? (
                                                         <input
                                                             type="text"
                                                             className="project-input"
@@ -291,7 +291,7 @@ function Project() {
                                                         project.comment ? project.comment : "None"
                                                     )}
                                                 </td>
-                                                {userData.position === 'PMManager' || userData.position === 'Administrator' && (
+                                                {(userData.position === 'PMManager' || userData.position === 'Administrator') && (
                                                     <td className="project-cell">
                                                         <button className="save-button" onClick={() => handleSave(project)}>Save</button>
                                                     </td>

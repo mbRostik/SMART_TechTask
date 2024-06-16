@@ -17,22 +17,26 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
     public class CreateEmployeeHandler : IRequestHandler<CreateEmployeeCommand, bool>
     {
         private readonly IMediator mediator;
+        private readonly Serilog.ILogger _logger;
 
         private readonly OutOfOfficeDbContext dbContext;
         private readonly IPublishEndpoint _publisher;
 
-        public CreateEmployeeHandler(OutOfOfficeDbContext dbContext, IMediator mediator, IPublishEndpoint publisher)
+        public CreateEmployeeHandler(OutOfOfficeDbContext dbContext, IMediator mediator, IPublishEndpoint publisher, Serilog.ILogger logger)
         {
             this.dbContext = dbContext;
             this.mediator = mediator;
             this._publisher = publisher;
+            _logger = logger;
         }
 
         public async Task<bool> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
         {
+            _logger.Information("Handle method started with request: {Request}", request);
+
             try
             {
-                Employee temp = new Employee
+                var temp = new Employee
                 {
                     Id = GenerateRandomString(),
                     FullName = request.model.FullName,
@@ -42,28 +46,35 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
                     OutOfOfficeBalance = request.model.OutOfOfficeBalance,
                     Photo = new byte[0]
                 };
+                _logger.Information("Created new employee instance with Id: {EmployeeId}", temp.Id);
 
-                var partner = await dbContext.Employees.FirstOrDefaultAsync(x=>x.Id==request.model.PeoplePartnerID);
-                if(partner != null && partner.Position==Position.HRManager) {
+                var partner = await dbContext.Employees.FirstOrDefaultAsync(x => x.Id == request.model.PeoplePartnerID, cancellationToken);
+                if (partner != null && partner.Position == Position.HRManager)
+                {
                     temp.PeoplePartnerID = partner.Id;
+                    _logger.Information("Assigned PeoplePartnerID: {PeoplePartnerID} to employee with Id: {EmployeeId}", partner.Id, temp.Id);
                 }
-                await dbContext.Employees.AddAsync(temp);
-                await dbContext.SaveChangesAsync();
+
+                await dbContext.Employees.AddAsync(temp, cancellationToken);
+                await dbContext.SaveChangesAsync(cancellationToken);
+                _logger.Information("Employee created and saved to the database with Id: {EmployeeId}", temp.Id);
+
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error occurred while creating user: {ex.Message}");
+                _logger.Error(ex, "Error occurred while creating employee with FullName: {FullName}", request.model.FullName);
                 return false;
             }
         }
 
         private static string GenerateRandomString()
         {
-            string chars = "qwertyuiopasdfghjklzxcvbnm0123456789-";
+            const string chars = "qwertyuiopasdfghjklzxcvbnm0123456789-";
             var random = new Random();
-            return new string(Enumerable.Repeat(chars, 35)
+            var randomString = new string(Enumerable.Repeat(chars, 35)
               .Select(s => s[random.Next(s.Length)]).ToArray());
+            return randomString;
         }
     }
 }

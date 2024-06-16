@@ -15,36 +15,37 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
         private readonly IMediator mediator;
 
         private readonly OutOfOfficeDbContext dbContext;
+        private readonly Serilog.ILogger _logger;
 
-        public ProfilePhotoChangedHandler(OutOfOfficeDbContext dbContext, IMediator mediator)
+        public ProfilePhotoChangedHandler(OutOfOfficeDbContext dbContext, IMediator mediator, Serilog.ILogger logger)
         {
             this.dbContext = dbContext;
             this.mediator = mediator;
+            _logger = logger;
         }
 
         public async Task Handle(ChangeUserAvatarCommand request, CancellationToken cancellationToken)
         {
+            _logger.Information("Attempting to change avatar for user ID: {UserId}", request.model.Id);
+
             try
             {
-                Console.WriteLine("Attempting to change avatar for user ID");
-
                 var user = await dbContext.Employees.FindAsync(new object[] { request.model.Id }, cancellationToken);
                 if (user != null)
                 {
                     user.Photo = Convert.FromBase64String(request.model.Avatar);
-                    await dbContext.SaveChangesAsync();
+                    await dbContext.SaveChangesAsync(cancellationToken);
 
-                    Console.WriteLine("Avatar changed successfully for user ID. Fetching updated user profile.");
-
+                    _logger.Information("Avatar changed successfully for user ID: {UserId}", request.model.Id);
                 }
                 else
                 {
-                    Console.WriteLine("User with ID not found. Cannot change avatar.");
+                    _logger.Warning("User with ID: {UserId} not found. Cannot change avatar.", request.model.Id);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("An error occurred while changing avatar for user ID" + ex);
+                _logger.Error(ex, "An error occurred while changing avatar for user ID: {UserId}", request.model.Id);
                 throw;
             }
         }
