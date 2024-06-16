@@ -1,0 +1,142 @@
+.profileApprovalRequest_Main {
+    display: flex;
+}
+
+.profileApprovalRequest_Main_Left {
+    width: 60%;
+}
+
+.profileApprovalRequest_Main_Right {
+    width: 40%;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.leaveRequest-filters {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    background-color: lightgrey;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.leaveRequest-filter {
+    display: flex;
+    flex-direction: column;
+}
+
+.leaveRequest-filter-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+    .leaveRequest-filter-select:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 4px rgba(0, 123, 255, 0.25);
+    }
+
+.leaveRequest-table-container {
+    margin-top: 30px;
+    background-color: lightgrey;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.leaveRequest-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leaveRequest-table-header {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.leaveRequest-sortable-column {
+    cursor: pointer;
+    padding: 10px;
+    text-align: left;
+}
+
+.leaveRequest-table-body .leaveRequest-row:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.leaveRequest-cell {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.leaveRequest-details {
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+    .leaveRequest-details h3 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #333;
+    }
+
+    .leaveRequest-details p {
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+.leaveRequest-close-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    display: block;
+    margin-top: 20px;
+}
+
+    .leaveRequest-close-button:hover {
+        background-color: #d32f2f;
+    }
+
+.leaveRequest-input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.leaveRequest-select {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.leaveRequest-save-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+    .leaveRequest-save-button:hover {
+        background-color: #45a049;
+    }

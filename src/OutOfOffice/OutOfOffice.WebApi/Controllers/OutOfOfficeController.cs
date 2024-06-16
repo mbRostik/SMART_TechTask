@@ -69,8 +69,11 @@ namespace OutOfOffice.WebApi.Controllers
         {
 
             var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-          
 
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User ID is required.");
+            }
             var result = await mediator.Send(new GetUserProfileQuery(userId));
 
             if (result == null)
@@ -80,6 +83,20 @@ namespace OutOfOffice.WebApi.Controllers
             return Ok(result);
         }
 
+
+        [HttpPost("CancelLeaveRequest")]
+        public async Task<ActionResult> CancelLeaveRequest([FromBody] CancelLeaveRequestDTO data)
+        {
+            var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User ID is required.");
+            }
+            await mediator.Send(new CancelLeaveRequestCommand(data, userId));
+
+            return Ok();
+        }
 
 
         [HttpPost("UpdateProfile")]
@@ -235,7 +252,7 @@ namespace OutOfOffice.WebApi.Controllers
             return BadRequest();
         }
 
-        [Authorize(Policy = "RequirePMManagerRole")]
+        [Authorize(Policy = "RequireHROrPMManagerRole")]
         [HttpGet("GetProjectById/{id}")]
         public async Task<ActionResult<GiveProjectWithDetailsDTO>> GetProjectById(string id)
         {

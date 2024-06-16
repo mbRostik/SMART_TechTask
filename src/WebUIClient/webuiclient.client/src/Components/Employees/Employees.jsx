@@ -66,7 +66,7 @@ function Employees() {
         subdivision: '',
     });
     const handleRowClick = (id) => {
-        if (userData && userData.position === 'PMManager') {
+        if (userData && userData.position === 'PMManager' || userData.position === 'Administrator') {
             console.log("fe");
         }
     };
@@ -85,8 +85,6 @@ function Employees() {
                 },
                 body: JSON.stringify(requestData)
             });
-            console.log("wkrgfjkwfjkwrgwrjkhghkjwrk");
-            console.log(response);
 
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
             let answer = await response.json();
@@ -122,7 +120,7 @@ function Employees() {
     useEffect(() => {
         const SetData = async () => {
             setLoadingState(true);
-            if (userData.position === "HRManager" || userData.position === "PMManager") {
+            if (userData.position === "HRManager" || userData.position === "PMManager" || userData.position === 'Administrator') {
                 await fetchEmployeesData();
             }
         };
@@ -143,11 +141,11 @@ function Employees() {
                 body: JSON.stringify(employee)
             });
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-            alert("Changes saved successfully");
         } catch (error) {
             console.log('Error while sending the request to the UserService');
         }
         finally {
+            await fetchEmployeesData();
             setLoadingState(false);
         }
     };
@@ -211,7 +209,7 @@ function Employees() {
                                                         <th className="sortable-column" onClick={() => handleSort('Position')}>Position</th>
                                                         <th className="sortable-column" onClick={() => handleSort('Status')}>Status</th>
                                                         <th className="sortable-column" onClick={() => handleSort('Subdivision')}>Subdivision</th>
-                                                        {userData.position === 'HRManager' && <th className="actions-column">Actions</th>}
+                                                        {userData.position === 'HRManager' || userData.position === 'Administrator' && <th className="actions-column">Actions</th>}
                                                     </tr>
                                                 </thead>
                                                 <tbody className="employee-table-body">
@@ -219,7 +217,7 @@ function Employees() {
                                                         <tr key={index} className="employee-row">
                                                             <td className="employee-cell">{employee.id}</td>
                                                             <td className="employee-cell" onClick={() => handleRowClick(employee.id)}>
-                                                                {userData.position === 'HRManager' ? (
+                                                                {userData.position === 'HRManager' || userData.position === 'Administrator' ? (
                                                                     <input
                                                                         type="text"
                                                                         className="employee-input"
@@ -231,7 +229,7 @@ function Employees() {
                                                                 )}
                                                             </td>
                                                             <td className="employee-cell">
-                                                                {userData.position === 'HRManager' ? (
+                                                                {userData.position === 'HRManager' || userData.position === 'Administrator' ? (
                                                                     <input
                                                                         type="number"
                                                                         className="employee-input"
@@ -243,7 +241,7 @@ function Employees() {
                                                                 )}
                                                             </td>
                                                             <td className="employee-cell">
-                                                                {userData.position === 'HRManager' ? (
+                                                                {userData.position === 'HRManager' || userData.position === 'Administrator' ? (
                                                                     <input
                                                                         type="text"
                                                                         className="employee-input"
@@ -255,7 +253,7 @@ function Employees() {
                                                                 )}
                                                             </td>
                                                             <td className="employee-cell">
-                                                                {userData.position === 'HRManager' ? (
+                                                                {userData.position === 'HRManager' || userData.position === 'Administrator' ? (
                                                                     <select
                                                                         className="employee-select"
                                                                         value={employee.position}
@@ -271,7 +269,7 @@ function Employees() {
                                                                 )}
                                                             </td>
                                                             <td className="employee-cell">
-                                                                {userData.position === 'HRManager' ? (
+                                                                {userData.position === 'HRManager' || userData.position === 'Administrator' ? (
                                                                     <select
                                                                         className="employee-select"
                                                                         value={employee.status}
@@ -285,7 +283,7 @@ function Employees() {
                                                                 )}
                                                             </td>
                                                             <td className="employee-cell">
-                                                                {userData.position === 'HRManager' ? (
+                                                                {userData.position === 'HRManager' || userData.position === 'Administrator' ? (
                                                                     <select
                                                                         className="employee-select"
                                                                         value={employee.subdivision}
@@ -298,7 +296,7 @@ function Employees() {
                                                                     employee.subdivision
                                                                 )}
                                                             </td>
-                                                            {userData.position === 'HRManager' && (
+                                                            {userData.position === 'HRManager' || userData.position === 'Administrator' && (
                                                                 <td className="employee-cell">
                                                                     <button className="save-button" onClick={() => handleSave(employee)}>Save</button>
                                                                 </td>

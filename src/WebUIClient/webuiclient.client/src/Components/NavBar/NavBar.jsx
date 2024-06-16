@@ -29,7 +29,7 @@ const NavBar = () => {
                         <div>Employees</div>
                     </NavLink>
 
-                    <NavLink to="/about-us" className="nav-item">
+                        <NavLink to="/approval-requests" className="nav-item">
                         <div>Approval Requests</div>
                     </NavLink>
 

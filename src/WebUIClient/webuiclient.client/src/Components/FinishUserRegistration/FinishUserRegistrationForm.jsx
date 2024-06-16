@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useAuth } from '../AuthProvider';
 import config from '../../config.json'; 
 import userManager from '../../AuthFiles/authConfig';
+import './FinishUserRegistrationForm.css';
+import { Link, useNavigate } from 'react-router-dom';
 
 const FinishUserRegistrationForm = () => {
     const [employeeStatus, setEmployeeStatus] = useState('Active');
@@ -15,8 +17,10 @@ const FinishUserRegistrationForm = () => {
         setUserState,
         setUserDataState, chats, activeChatId,
         setActiveChatId, unknownsmbData, setunknownsmbDataState, hubConnection } = useAuth();
+    const navigate = useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
         
 
         const data = {
@@ -40,24 +44,26 @@ const FinishUserRegistrationForm = () => {
             });
 
             console.log('Response:', response.data);
+            await userManager.signoutRedirect();
+            navigate('/');
         } catch (error) {
             console.error('Error:', error);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
+        <form onSubmit={handleSubmit} className="employee-form">
+            <div className="form-group">
                 <label>Employee Status:</label>
-                <select value={employeeStatus} onChange={(e) => setEmployeeStatus(e.target.value)}>
+                <select value={employeeStatus} onChange={(e) => setEmployeeStatus(e.target.value)} className="form-control">
                     <option value="Active">Active</option>
                     <option value="Inactive">Inactive</option>
                 </select>
             </div>
 
-            <div>
+            <div className="form-group">
                 <label>Position:</label>
-                <select value={position} onChange={(e) => setPosition(e.target.value)}>
+                <select value={position} onChange={(e) => setPosition(e.target.value)} className="form-control">
                     <option value="HRManager">HR Manager</option>
                     <option value="Employee">Employee</option>
                     <option value="PMManager">Project Manager</option>
@@ -65,34 +71,37 @@ const FinishUserRegistrationForm = () => {
                 </select>
             </div>
 
-            <div>
+            <div className="form-group">
                 <label>Subdivision:</label>
-                <select value={subdivision} onChange={(e) => setSubdivision(e.target.value)}>
+                <select value={subdivision} onChange={(e) => setSubdivision(e.target.value)} className="form-control">
                     <option value="HR">HR</option>
                     <option value="IT">IT</option>
                 </select>
             </div>
 
-            <div>
+            <div className="form-group">
                 <label>Partner Name:</label>
                 <input
                     type="text"
                     value={partnerName}
                     onChange={(e) => setPartnerName(e.target.value)}
+                    className="form-control"
                 />
             </div>
 
-            <div>
+            <div className="form-group">
                 <label>Day Off Count:</label>
                 <input
                     type="number"
                     value={dayOffCount}
                     onChange={(e) => setDayOffCount(parseInt(e.target.value))}
+                    className="form-control"
                 />
             </div>
 
-            <button type="submit">Submit</button>
+            <button type="submit" className="submit-button">Submit</button>
         </form>
+
     );
 };
 

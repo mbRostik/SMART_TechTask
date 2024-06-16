@@ -33,7 +33,7 @@ function Project() {
 
 
     const handleRowClick = (id) => {
-        if (userData && userData.position === 'PMManager') {
+        if (userData && (userData.position === 'PMManager' || userData.position === 'Administrator' )) {
             console.log("Redirecting to project details");
         }
     };
@@ -108,14 +108,11 @@ function Project() {
                 },
                 body: JSON.stringify(projectData)
             });
-            if (response.status === 200) {
-                await fetchProjectsData();
-            }
         } catch (error) {
             console.error('Error adding project', error);
-            alert('Failed to add project');
         }
         finally {
+            await fetchProjectsData();
             setLoadingState(false);
 
         }
@@ -128,7 +125,7 @@ function Project() {
         
         const SetData = async () => {
             setLoadingState(true);
-            if (userData.position === "PMManager" || userData.position === "HRManager") {
+            if (userData.position === "PMManager" || userData.position === "HRManager" || userData.position === 'Administrator') {
                 await fetchProjectsData();
             }
         };
@@ -149,11 +146,11 @@ function Project() {
                 body: JSON.stringify(project)
             });
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-            alert("Changes saved successfully");
         } catch (error) {
             console.log('Error while sending the request to the ProjectService');
         }
         finally {
+            await fetchProjectsData();
             setLoadingState(false);
         }
     };
@@ -217,7 +214,7 @@ function Project() {
                                             <tr key={index} className="project-row">
                                                 <td onClick={() => handleProjectClick(project.id)} className="project-cell">{project.id}</td>
                                                 <td className="project-cell" onClick={() => handleRowClick(project.id)}>
-                                                    {userData.position === 'PMManager' ? (
+                                                    {userData.position === 'PMManager' || userData.position === 'Administrator'  ? (
                                                         <select
                                                             className="project-select"
                                                             value={project.projectType}
@@ -232,7 +229,7 @@ function Project() {
                                                 </td>
 
                                                 <td className="project-cell" onClick={() => handleRowClick(project.id)}>
-                                                    {userData.position === 'PMManager' ? (
+                                                    {userData.position === 'PMManager' || userData.position === 'Administrator' ? (
                                                         <select
                                                             className="project-select"
                                                             value={project.status}
@@ -247,7 +244,7 @@ function Project() {
                                                 </td>
 
                                                 <td className="project-cell">
-                                                    {userData.position === 'PMManager' ? (
+                                                    {userData.position === 'PMManager' || userData.position === 'Administrator' ? (
                                                         <input
                                                             type="date"
                                                             className="project-input"
@@ -259,7 +256,7 @@ function Project() {
                                                     )}
                                                 </td>
                                                 <td className="project-cell">
-                                                    {userData.position === 'PMManager' ? (
+                                                    {userData.position === 'PMManager' || userData.position === 'Administrator' ? (
                                                         <input
                                                             type="date"
                                                             className="project-input"
@@ -271,7 +268,7 @@ function Project() {
                                                     )}
                                                 </td>
                                                 <td className="project-cell">
-                                                    {userData.position === 'PMManager' ? (
+                                                    {userData.position === 'PMManager' || userData.position === 'Administrator' ? (
                                                         <input
                                                             type="text"
                                                             className="project-input"
@@ -283,7 +280,7 @@ function Project() {
                                                     )}
                                                 </td>
                                                 <td className="project-cell">
-                                                    {userData.position === 'PMManager' ? (
+                                                    {userData.position === 'PMManager' || userData.position === 'Administrator' ? (
                                                         <input
                                                             type="text"
                                                             className="project-input"
@@ -294,7 +291,7 @@ function Project() {
                                                         project.comment ? project.comment : "None"
                                                     )}
                                                 </td>
-                                                {userData.position === 'PMManager' && (
+                                                {userData.position === 'PMManager' || userData.position === 'Administrator' && (
                                                     <td className="project-cell">
                                                         <button className="save-button" onClick={() => handleSave(project)}>Save</button>
                                                     </td>
@@ -306,7 +303,7 @@ function Project() {
                                         </div>
 
                             <div className="">
-                                {userData && userData.position === 'PMManager' && (
+                                            {userData && userData.position === 'PMManager' || userData.position === 'Administrator' && (
                                     <>
                                         <div className="create-project-form">
                                             <h2>Create New Project</h2>

@@ -13,6 +13,7 @@ import Employees from './Components/Employees/Employees';
 import Profile from './Components/Profile/Profile';
 import Project from './Components/Project/Project';
 import ProjectDetails from './Components/Project/ProjectDetails/ProjectDetails';
+import ApprovalRequests from './Components/ApprovalRequest/ApprovalRequest';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -32,6 +33,7 @@ function AppContainer() {
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/projects" element={<Project />} />
                     <Route path="/ProjectDetails/:id" element={<ProjectDetails />} />
+                    <Route path="/approval-requests" element={<ApprovalRequests />} />
 
                     </Routes>
                 </div>

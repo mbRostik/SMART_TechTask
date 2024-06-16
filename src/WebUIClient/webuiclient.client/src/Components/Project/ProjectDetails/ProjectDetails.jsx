@@ -74,7 +74,7 @@ const ProjectDetails = () => {
 
     useEffect(() => {
         if (userData) {
-            if (userData.position === "PMManager") {
+            if (userData.position === "PMManager" || userData.position === "HRManager" || userData.position === 'Administrator') {
                 const fetchProject = async () => {
                     setLoadingState(true);
                     try {

@@ -47,7 +47,6 @@ function ProfileProject() {
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
             let answer = await response.json();
             setProjectsData(answer);
-            console.log(projectsData);
 
         } catch (error) {
             console.log('Error while sending the request to the ProjectService');

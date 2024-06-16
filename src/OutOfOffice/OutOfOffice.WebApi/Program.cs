@@ -46,17 +46,27 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddAuthorization(options =>
 {
+
+
+
     options.AddPolicy("RequireEmployeeRole", policy =>
-        policy.RequireRole("Employee"));
+        policy.RequireAssertion(context =>
+                context.User.IsInRole("Employee")  || context.User.IsInRole("Administrator")));
+
     options.AddPolicy("RequireHRManagerRole", policy =>
-        policy.RequireRole("HRManager"));
+        policy.RequireAssertion(context =>
+                context.User.IsInRole("HRManager")  || context.User.IsInRole("Administrator")));
+
     options.AddPolicy("RequirePMManagerRole", policy =>
-        policy.RequireRole("PMManager"));
+         policy.RequireAssertion(context =>
+               context.User.IsInRole("PMManager") || context.User.IsInRole("Administrator")));
+
     options.AddPolicy("RequireAdministratorRole", policy =>
         policy.RequireRole("Administrator"));
+
     options.AddPolicy("RequireHROrPMManagerRole", policy =>
             policy.RequireAssertion(context =>
-                context.User.IsInRole("HRManager") || context.User.IsInRole("PMManager")));
+                context.User.IsInRole("HRManager") || context.User.IsInRole("PMManager") || context.User.IsInRole("Administrator")));
 });
 builder.Services.AddCors();
 

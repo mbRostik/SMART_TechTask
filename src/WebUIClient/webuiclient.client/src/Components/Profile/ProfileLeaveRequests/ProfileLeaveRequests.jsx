@@ -45,7 +45,6 @@ const ProfileLeaveRequests = () => {
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
             let answer = await response.json();
             setProfileLeaveRequest(answer);
-            console.log(profileLeaveRequest);
 
         } catch (error) {
             console.log('Error while sending the request to the ProjectService');
@@ -121,6 +120,29 @@ const ProfileLeaveRequests = () => {
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toISOString().split('T')[0];
+    };
+
+
+
+    const handleCancel = async (id) => {
+        setLoadingState(true);
+        try {
+            const accessToken = await userManager.getUser().then(user => user.access_token);
+            const response = await fetch(`${config.apiBaseUrl}/CancelLeaveRequest`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id })
+            });
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            await fetchLeaveRequestsData(); 
+        } catch (error) {
+            console.error('Error canceling leave request', error);
+        } finally {
+            setLoadingState(false);
+        }
     };
     return (
         <div className="ProfileMain">
@@ -241,7 +263,17 @@ const ProfileLeaveRequests = () => {
                                                         {leaveRequest.endDate ? formatDate(leaveRequest.endDate) : "None"}
                                                     </td>
                                                     <td className="project-cell">{leaveRequest.comment ? leaveRequest.comment : "None"}</td>
-                                                    <td className="project-cell">{leaveRequest.status}</td>
+                                                    <td className="leaveRequest-cell">
+                                                        {leaveRequest.status}
+                                                        {leaveRequest.status === 'Submitted' && (
+                                                            <button
+                                                                className="leaveRequest-cancel-button"
+                                                                onClick={() => handleCancel(leaveRequest.id)}
+                                                            >
+                                                                Cancel
+                                                            </button>
+                                                        )}
+                                                    </td>
                                                 </tr>
                                             ))}
                                         </tbody>

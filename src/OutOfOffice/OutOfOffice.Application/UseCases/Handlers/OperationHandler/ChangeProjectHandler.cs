@@ -40,6 +40,11 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
                      .Where(x => x.FullName.Contains(request.model.ProjectManagerId))
                      .FirstOrDefaultAsync();
 
+                if(manager.Position!=Position.PMManager)
+                {
+                    return false;
+
+                }
                 project.StartDate=request.model.StartDate;
                 project.EndDate=request.model.EndDate;
                 project.Comment = request.model.Comment;

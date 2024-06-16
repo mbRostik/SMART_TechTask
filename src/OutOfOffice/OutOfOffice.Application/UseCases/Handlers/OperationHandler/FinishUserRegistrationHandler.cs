@@ -39,10 +39,7 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
                     throw new Exception("Unregistered user not found.");
                 }
 
-                var partnerId = await dbContext.Employees.FirstOrDefaultAsync(x => x.FullName == request.model.PartnerName).Select(x=>x.Id);
-                var partner = await dbContext.Employees
-                    .Where(x => x.FullName.Contains(request.model.PartnerName))
-                    .FirstOrDefaultAsync();
+                
                 Employee employee = new Employee
                 {
                     Id = request.userId,
@@ -53,16 +50,27 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
                     OutOfOfficeBalance = request.model.DayOffCount,
                     Photo = new byte[0]
                 };
-
-                if (partner != null && partner.Position == Position.HRManager)
+                if(request.model.PartnerName!=null && request.model.PartnerName != "")
                 {
-                    employee.PeoplePartnerID = partner.Id;
-                }
-                if (partner == null)
-                {
-                    employee.PeoplePartnerID =null;
+                    var partnerId = await dbContext.Employees.FirstOrDefaultAsync(x => x.FullName == request.model.PartnerName).Select(x => x.Id);
+                    var partner = await dbContext.Employees
+                        .Where(x => x.FullName.Contains(request.model.PartnerName))
+                        .FirstOrDefaultAsync();
+                    if (partner != null && partner.Position == Position.HRManager)
+                    {
+                        employee.PeoplePartnerID = partner.Id;
+                    }
+                    if (partner == null)
+                    {
+                        employee.PeoplePartnerID = null;
 
+                    }
                 }
+                else
+                {
+                    employee.PeoplePartnerID = null;
+                }
+                
                 var model = await dbContext.Employees.AddAsync(employee);
 
                 UserPositionSetEvent userPositionSetEvent = new UserPositionSetEvent

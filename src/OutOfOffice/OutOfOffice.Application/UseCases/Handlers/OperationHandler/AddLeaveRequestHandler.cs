@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using OutOfOffice.Application.UseCases.Commands;
 using OutOfOffice.Domain;
 using OutOfOffice.Domain.Approval_Requests.Enums;
@@ -34,9 +35,11 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
         {
             try
             {
+                var user = await dbContext.Employees.FirstOrDefaultAsync(X => X.Id == request.model.Id);
+ 
                 LeaveRequest leaveRequest = new LeaveRequest
                 {
-                    EmployeeId = request.model.Id,
+                    EmployeeId=user.Id,
                     AbsenceReason = (AbsenceReason)Enum.Parse(typeof(AbsenceReason), request.model.AbsenceReason),
                     StartDate = request.model.StartDate,
                     EndDate = request.model.EndDate,

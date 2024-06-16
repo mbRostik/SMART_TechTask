@@ -35,15 +35,18 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
         {
             try
             {
+                if (request.model.Status == "New")
+                {
+                    return false;
+                }
                 var apRequest = await dbContext.ApprovalRequests.FirstOrDefaultAsync(x => x.Id == request.model.Id);
 
                 apRequest.Comment = request.model.Comment;
                 apRequest.Status = (ApprovalRequestStatus)Enum.Parse(typeof(ApprovalRequestStatus), request.model.Status);
-
+                apRequest.ApproverId=request.userId;
 
                 var leavRequest = await dbContext.LeaveRequests.FirstOrDefaultAsync(x => x.Id == apRequest.LeaveRequestId);
                 leavRequest.Status = (LeaveRequestStatus)Enum.Parse(typeof(LeaveRequestStatus), request.model.Status);
-
                 await dbContext.SaveChangesAsync();
                 return true;
 

@@ -37,7 +37,7 @@ namespace OutOfOffice.Application.UseCases.Handlers.OperationHandler
                    .Where(x => x.FullName.Contains(request.model.ProjectManagerId))
                    .FirstOrDefaultAsync();
 
-                if (manager == null)
+                if (manager == null || manager.Position != Position.PMManager)
                 {
                     Console.WriteLine("The project can not be created. There is no manager");
                     return false;
