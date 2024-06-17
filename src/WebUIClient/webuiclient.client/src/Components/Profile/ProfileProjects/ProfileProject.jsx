@@ -136,7 +136,6 @@ function ProfileProject() {
                                             <th className="sortable-column" onClick={() => handleSort('EndDate')}>End Date</th>
                                             <th className="sortable-column" onClick={() => handleSort('ProjectManagerId')}>Project Manager ID</th>
                                             <th className="sortable-column" onClick={() => handleSort('Comment')}>Comment</th>
-                                            {userData.position === 'PMManager' && <th className="actions-column">Actions</th>}
                                         </tr>
                                     </thead>
                                                 <tbody className="project-table-body">

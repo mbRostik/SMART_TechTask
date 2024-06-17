@@ -309,7 +309,7 @@ function Employees() {
 
 
                                         <div className="">
-                                            {userData && (userData.position === 'PMManager' || userData.position === 'Administrator') && (
+                                            {userData && (userData.position === 'HRManager' || userData.position === 'Administrator') && (
                                                 <>
                                                     <div className="create-employee-form">
                                                     <h2>Create New Employee</h2>

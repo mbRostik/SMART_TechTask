@@ -108,6 +108,17 @@ function Project() {
                 },
                 body: JSON.stringify(projectData)
             });
+
+           if (response.ok) {
+                setProjectData({
+                    projectType: '',
+                    startDate: '',
+                    endDate: '',
+                    projectManagerId: '',
+                    comment: '',
+                    status: ''
+                });
+    }
         } catch (error) {
             console.error('Error adding project', error);
         }
@@ -146,6 +157,7 @@ function Project() {
                 body: JSON.stringify(project)
             });
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+           
         } catch (error) {
             console.log('Error while sending the request to the ProjectService');
         }
@@ -301,9 +313,9 @@ function Project() {
                                     </tbody>
                                 </table>
                                         </div>
-
+                                        <br></br>
                             <div className="">
-                                            {userData && userData.position === 'PMManager' || userData.position === 'Administrator' && (
+                                            {(userData && userData.position === 'PMManager' || userData.position === 'Administrator') && (
                                     <>
                                         <div className="create-project-form">
                                             <h2>Create New Project</h2>

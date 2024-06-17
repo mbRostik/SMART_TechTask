@@ -66,21 +66,21 @@
     display: inline-block;
     margin-top: 5px;
     padding: 4px 02px;
-    background-color: orange;
+    background-color: #4CAF50;
     color: #ffffff;
     text-decoration: none;
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    text-align:center;
-    align-content:center;
-    align-items:center;
+    text-align: center;
+    align-content: center;
+    align-items: center;
 }
 
 
     .RegistrationButton:hover {
-        background-color: white;
+        background-color: #45a049;
         color: black;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
